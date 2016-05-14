@@ -25,7 +25,12 @@
         </dependency>
         <dependency>
             <groupId>xyz.dongxiaoxia.commons</groupId>
-            <artifactId>xyz.dongxiaoxia.commons.log</artifactId>
+            <artifactId>log</artifactId>
+            <version>${project_version}</version>
+        </dependency>
+        <dependency>
+            <groupId>xyz.dongxiaoxia.commons</groupId>
+            <artifactId>security</artifactId>
             <version>${project_version}</version>
         </dependency>
         <!--<dependency>-->
@@ -39,6 +44,8 @@
         <module>../utils</module>
         <module>../io</module>
         <module>../log</module>
+        <module>../json</module>
+        <module>../security</module>
     </modules>
 
     <build>

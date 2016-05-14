@@ -6,6 +6,7 @@
 
     <groupId>xyz.dongxiaoxia.commons</groupId>
     <artifactId>utils</artifactId>
+    <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
 
     <build>
@@ -22,5 +23,9 @@
             </plugin>
         </plugins>
     </build>
+    <modules>
+        <module>../json</module>
+        <module>../security</module>
+    </modules>
 
 </project>

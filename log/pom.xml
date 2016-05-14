@@ -10,7 +10,7 @@
     <!--</parent>-->
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>xyz.dongxiaoxia.commons.log</artifactId>
+    <artifactId>log</artifactId>
     <groupId>xyz.dongxiaoxia.commons</groupId>
     <version>0.0.1-SNAPSHOT</version>
     <dependencies>
