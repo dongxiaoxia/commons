@@ -1,30 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="436be2dc-455d-4468-acdc-0f086a264b2e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__xyz_dongxiaoxia_commons_utils_0_0_1_SNAPSHOT.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/SecurityTest.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../json/json.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../json/pom.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../security/pom.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../security/security.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/AESUtil.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/Base64Util.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/DESUtil.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/Example.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/HexadecimalconversionUtil.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/Md5Util.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/RSAUtil.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/SHAUtil.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../utils/src/main/java/xyz/dongxiaoxia/commons/utils/ClassUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+    <list default="true" id="436be2dc-455d-4468-acdc-0f086a264b2e" name="Default" comment="安全算法模块完成">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/install.iml" afterPath="$PROJECT_DIR$/install.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../log/pom.xml" afterPath="$PROJECT_DIR$/../log/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../utils/pom.xml" afterPath="$PROJECT_DIR$/../utils/pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/SecurityTest.java" afterPath="$PROJECT_DIR$/src/main/java/SecurityTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/Example.java" afterPath="$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/Example.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../utils/src/main/java/xyz/dongxiaoxia/commons/logging/ConfigFileUtil.java" afterPath="$PROJECT_DIR$/../utils/src/main/java/xyz/dongxiaoxia/commons/logging/ConfigFileUtil.java" />
     </list>
     <ignored path="install.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -63,7 +44,72 @@
     <favorites_list name="install" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="JSONUtils.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../utils/src/main/java/xyz/dongxiaoxia/commons/utils/JSONUtils.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="171" column="0" selection-start-line="171" selection-start-column="0" selection-end-line="171" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SecurityTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/SecurityTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="53" column="78" selection-start-line="53" selection-start-column="78" selection-end-line="53" selection-end-column="78" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Example.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/Example.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.4620462">
+              <caret line="68" column="44" selection-start-line="68" selection-start-column="44" selection-end-line="68" selection-end-column="44" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ConfigFileUtil.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../utils/src/main/java/xyz/dongxiaoxia/commons/logging/ConfigFileUtil.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PropertiesHelper.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../utils/src/main/java/xyz/dongxiaoxia/commons/logging/PropertiesHelper.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="45" column="18" selection-start-line="45" selection-start-column="18" selection-end-line="45" selection-end-column="18" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HexadecimalconversionUtil.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/HexadecimalconversionUtil.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="15" column="62" selection-start-line="15" selection-start-column="62" selection-end-line="15" selection-end-column="62" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -113,17 +159,18 @@
         <option value="$PROJECT_DIR$/../utils/src/main/java/xyz/dongxiaoxia/commons/utils/RSATest.java" />
         <option value="$PROJECT_DIR$/../security/pom.xml" />
         <option value="$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/Base64Util.java" />
-        <option value="$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/HexadecimalconversionUtil.java" />
         <option value="$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/Md5Util.java" />
         <option value="$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/AESUtil.java" />
         <option value="$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/DESUtil.java" />
         <option value="$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/SHAUtil.java" />
-        <option value="$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/Example.java" />
         <option value="$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/RSAUtil.java" />
         <option value="$PROJECT_DIR$/../log/pom.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/../utils/src/main/java/xyz/dongxiaoxia/commons/utils/SecurityTest.java" />
+        <option value="$PROJECT_DIR$/../utils/src/main/java/xyz/dongxiaoxia/commons/logging/ConfigFileUtil.java" />
         <option value="$PROJECT_DIR$/src/main/java/SecurityTest.java" />
+        <option value="$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/HexadecimalconversionUtil.java" />
+        <option value="$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/Example.java" />
       </list>
     </option>
   </component>
@@ -855,7 +902,7 @@
       <option name="number" value="Default" />
       <updated>1463150632353</updated>
       <workItem from="1463150633965" duration="18916000" />
-      <workItem from="1463210822328" duration="32225000" />
+      <workItem from="1463210822328" duration="33146000" />
     </task>
     <task id="LOCAL-00001" summary="日志模块完成">
       <created>1463212470884</created>
@@ -863,24 +910,39 @@
       <option name="project" value="LOCAL" />
       <updated>1463212470884</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="安全算法模块完成">
+      <created>1463250215145</created>
+      <option name="number" value="00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1463250215145</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="51141000" />
+    <option name="totallyTimeSpent" value="52062000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="FindBugs-IDEA" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32838285" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32838285" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="FindBugs-IDEA" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5330033" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32838285" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.80033004" sideWeight="0.5060698" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22837633" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.80033004" sideWeight="0.4939302" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.44884488" sideWeight="0.4939302" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31188118" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32852808" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="CheckStyle" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -914,7 +976,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="日志模块完成" />
-    <option name="LAST_COMMIT_MESSAGE" value="日志模块完成" />
+    <MESSAGE value="安全算法模块完成" />
+    <option name="LAST_COMMIT_MESSAGE" value="安全算法模块完成" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -984,14 +1047,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../utils/src/main/java/xyz/dongxiaoxia/commons/logging/PropertiesHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33256352">
-          <caret line="100" column="47" selection-start-line="100" selection-start-column="47" selection-end-line="100" selection-end-column="47" />
           <folding />
         </state>
       </provider>
@@ -1114,16 +1169,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../utils/src/main/java/xyz/dongxiaoxia/commons/utils/JSONUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="34" column="13" selection-start-line="34" selection-start-column="13" selection-end-line="34" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../security/pom.xml">
       <provider editor-type-id="MavenHelperPluginDependencyAnalyzer">
         <state />
@@ -1131,14 +1176,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.75757575">
           <caret line="2" column="37" selection-start-line="2" selection-start-column="37" selection-end-line="2" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/HexadecimalconversionUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="106" column="9" selection-start-line="106" selection-start-column="9" selection-end-line="106" selection-end-column="9" />
           <folding />
         </state>
       </provider>
@@ -1212,24 +1249,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/Example.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6554404">
-          <caret line="75" column="41" selection-start-line="75" selection-start-column="41" selection-end-line="75" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/SecurityTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3316062">
-          <caret line="65" column="41" selection-start-line="65" selection-start-column="41" selection-end-line="65" selection-end-column="41" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/LogTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.19430052">
@@ -1256,6 +1275,58 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6875">
           <caret line="32" column="32" selection-start-line="32" selection-start-column="32" selection-end-line="32" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../utils/src/main/java/xyz/dongxiaoxia/commons/logging/PropertiesHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="45" column="18" selection-start-line="45" selection-start-column="18" selection-end-line="45" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../utils/src/main/java/xyz/dongxiaoxia/commons/logging/ConfigFileUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../utils/src/main/java/xyz/dongxiaoxia/commons/utils/JSONUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="171" column="0" selection-start-line="171" selection-start-column="0" selection-end-line="171" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/SecurityTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="53" column="78" selection-start-line="53" selection-start-column="78" selection-end-line="53" selection-end-column="78" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/HexadecimalconversionUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="15" column="62" selection-start-line="15" selection-start-column="62" selection-end-line="15" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../security/src/main/java/xyz/dongxiaoxia/commons/security/Example.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4620462">
+          <caret line="68" column="44" selection-start-line="68" selection-start-column="44" selection-end-line="68" selection-end-column="44" />
           <folding />
         </state>
       </provider>

@@ -33,31 +33,28 @@ public class ConfigFileUtil {
                 if (FileUtil.checkFileExist(metaInfPath, "namespace.properties")) {
                     String namespaceFullPath = metaInfPath + "/namespace.properties";
                     PropertiesHelper propertiesHelper = new PropertiesHelper(namespaceFullPath);
-                    if (propertiesHelper != null) {
-                        String configPath = propertiesHelper.getString("configPath");
-                        System.out.println("configPath:" + configPath);
-                        if (configPath != null && !configPath.endsWith("\\") && !configPath.endsWith("/")) {
-                            configPath += "/";
-                        }
-                        file = FileUtil.getFile(configPath, fileName);
-                        if (file!=null){
-                            return  file;
-                        }
-                    }else {
-                        System.out.println("propertiesHelper.properties is null:"+ namespaceFullPath);
+                    String configPath = propertiesHelper.getString("configPath");
+                    System.out.println("configPath:" + configPath);
+                    if (configPath != null && !configPath.endsWith("\\") && !configPath.endsWith("/")) {
+                        configPath += "/";
                     }
-                }else{
+                    file = FileUtil.getFile(configPath, fileName);
+                    if (file != null) {
+                        return file;
+                    }
+                    System.out.println("propertiesHelper.properties is null:" + namespaceFullPath);
+                } else {
                     //在类路径下获取
-                    file = FileUtil.getFile(metaInfPath,fileName);
-                    if (file!=null){
+                    file = FileUtil.getFile(metaInfPath, fileName);
+                    if (file != null) {
                         System.out.print("Match metaInfPath:" + file.getPath());
                         return file;
                     }
                 }
             }
             String path = classLoader.getResource("").getPath();
-            file = FileUtil.getFile(path,fileName);
-            if (file!=null){
+            file = FileUtil.getFile(path, fileName);
+            if (file != null) {
                 System.out.println("Match getResource Path:" + file.getPath());
                 return file;
             }

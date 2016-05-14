@@ -53,7 +53,7 @@ public class SecurityTest {
     private void DESTest() {
         System.out.println("=======================DES=====================");
         try {
-            System.out.println(inputStr + " 加密后再解码的结果：" + new String(DESUtil.decrypt(DESUtil.encrypt(inputStr.getBytes(), "dongxiaoxia"), "dongxiaoxia")));
+            System.out.println(inputStr + " 加密后再解码的结果：" + new String(DESUtil.decrypt(DESUtil.encrypt(inputStr.getBytes("UTF-8"), "dongxiaoxia"), "dongxiaoxia"),"UTF-8"));
         } catch (Exception e) {
             e.printStackTrace();
         }
