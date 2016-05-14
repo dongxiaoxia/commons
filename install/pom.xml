@@ -23,6 +23,11 @@
             <version>4.10</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>xyz.dongxiaoxia.commons</groupId>
+            <artifactId>xyz.dongxiaoxia.commons.log</artifactId>
+            <version>${project_version}</version>
+        </dependency>
         <!--<dependency>-->
             <!--<groupId>com.baiyz.uya.common</groupId>-->
             <!--<artifactId>com.baiyz.uya.common.bll</artifactId>-->
@@ -33,6 +38,7 @@
     <modules>
         <module>../utils</module>
         <module>../io</module>
+        <module>../log</module>
     </modules>
 
     <build>
