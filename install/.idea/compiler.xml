@@ -22,6 +22,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="cache" />
         <module name="io" />
         <module name="json" />
         <module name="log" />
@@ -29,6 +30,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="cache" target="1.5" />
       <module name="install" target="1.8" />
       <module name="io" target="1.5" />
       <module name="json" target="1.5" />

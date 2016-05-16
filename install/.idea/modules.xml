@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../cache/cache.iml" filepath="$PROJECT_DIR$/../cache/cache.iml" />
       <module fileurl="file://$PROJECT_DIR$/install.iml" filepath="$PROJECT_DIR$/install.iml" />
       <module fileurl="file://$PROJECT_DIR$/../io/io.iml" filepath="$PROJECT_DIR$/../io/io.iml" />
       <module fileurl="file://$PROJECT_DIR$/../json/json.iml" filepath="$PROJECT_DIR$/../json/json.iml" />

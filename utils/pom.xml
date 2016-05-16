@@ -26,6 +26,7 @@
     <modules>
         <module>../json</module>
         <module>../security</module>
+        <module>../cache</module>
     </modules>
 
 </project>
