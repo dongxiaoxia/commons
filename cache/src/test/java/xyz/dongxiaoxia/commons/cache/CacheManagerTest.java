@@ -7,6 +7,10 @@ import org.junit.Test;
  */
 public class CacheManagerTest {
 
+    public static void main(String[] args) throws InterruptedException {
+        new CacheManagerTest().test();
+    }
+
     @Test
     public void test() throws InterruptedException {
         System.out.println(CacheManager.getSimpleFlag("alksd"));
@@ -34,5 +38,23 @@ public class CacheManagerTest {
         System.out.println(CacheManager.get("111").isExpired());
         Thread.sleep(100);
         System.out.println(CacheManager.get("111").isExpired());
+        CacheManager.removeOutOfTimeCache(500);
+       new Thread() {
+           @Override
+           public void run() {
+               for (int i = 0;i<100;i++){
+                   new Thread(){
+                       @Override
+                       public void run() {
+                           for (int i = 0;i<100;i++){
+                               CacheEntry entry = new CacheEntry("111","222",10,false);
+                               CacheManager.put(String.valueOf(i),entry,i,false);
+                               System.out.println("========================key:"+i+"=====================");
+                           }
+                       }
+                   }.start();
+               }
+           }
+       }.start();
     }
 }

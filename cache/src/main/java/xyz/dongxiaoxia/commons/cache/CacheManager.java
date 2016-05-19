@@ -11,6 +11,7 @@ import java.util.*;
 //可扩展的功能：当chche到内存溢出时必须清除掉最早期的一些缓存对象，这就要求对每个缓存对象保存创建时间
 public class CacheManager {
     private static HashMap cacheMap = new HashMap();
+//    private static ConcurrentHashMap cacheMap = new ConcurrentHashMap();
 
     //单实例构造方法
     private CacheManager() {
@@ -113,7 +114,7 @@ public class CacheManager {
     }
 
     //载入缓存信息
-    public static void put(String key, CacheEntry cacheEntry, long dt, boolean expired) {
+    public synchronized static void put(String key, CacheEntry cacheEntry, long dt, boolean expired) {
         CacheEntry cache = new CacheEntry();
         cache.setKey(key);
         cache.setExpired(expired);//缓存默认载入时，终止状态为FALSE
@@ -123,7 +124,7 @@ public class CacheManager {
     }
 
     //重写载入缓存信息方法
-    public static void put(String key, CacheEntry cacheEntry, long dt) {
+    public synchronized static void put(String key, CacheEntry cacheEntry, long dt) {
         CacheEntry cache = new CacheEntry();
         cache.setKey(key);
         cache.setValue(cacheEntry);
@@ -186,5 +187,41 @@ public class CacheManager {
         return set;
     }
 
+    //定时删除缓存
+    public synchronized static void removeOutOfTimeCache(long time){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true){
+                    System.out.println("=====================================================================================");
+                    System.out.println("============================执行定时删除过期缓存任务=================================");
+                    Set<String> keySet = cacheMap.keySet();
+                    String key;
+                    CacheEntry cacheEntry;
+                    List<String> removeKey = new ArrayList<>();
+                    Iterator<String> it = keySet.iterator();
+                    while (it.hasNext()){
+                        key = it.next();
+                        cacheEntry = (CacheEntry) cacheMap.get(key);
+                        if (cacheExpired(cacheEntry)){
+                            removeKey.add(key);
+                            System.out.println("============================key:"+key+"=================================");
+                        }
+                    }
+                    for (String s : removeKey){
+                        cacheMap.remove(s);
+                    }
+                    System.out.println("============================执行定时删除过期缓存结束=================================");
+                    System.out.println("=====================================================================================");
+                    try {
+                        Thread.sleep(time);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        thread.start();
+    }
 
 }
