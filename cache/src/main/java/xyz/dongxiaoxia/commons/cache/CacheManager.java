@@ -213,11 +213,11 @@ public class CacheManager {
                     }
                     System.out.println("============================执行定时删除过期缓存结束=================================");
                     System.out.println("=====================================================================================");
-                    try {
-                        Thread.sleep(time);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+//                    try {
+//                        Thread.sleep(time);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
                 }
             }
         });
