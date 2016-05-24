@@ -9,7 +9,7 @@ import java.util.Map;
  * @author dongxiaoxia
  * @create 2016-05-15 20:08
  */
-public class SimpleLRUCache<K,V> extends LinkedHashMap<K,V> {
+public class SimpleLRUCache<K,V> extends LinkedHashMap<K,V>{
 
     private static int MAX_SIZE;
 

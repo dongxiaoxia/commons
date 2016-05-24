@@ -17,7 +17,7 @@ public class CacheTimerHandler {
     private static final long SECOND_TIME = 1000L;//默认过期时间为20秒
     private static final int DEFAULT_VALIDITY_TIME = 20;//默认过期时间为20秒
     private static final Timer timer;
-    private static final ConcurrentHashMap<String, CacheEntry1> map;
+    private static final ConcurrentHashMap<String, CacheEntry> map;
 
     static {
         timer = new Timer();
@@ -30,7 +30,7 @@ public class CacheTimerHandler {
      * @param key
      * @param ce
      */
-    public static synchronized void addCache(String key, CacheEntry1 ce) {
+    public static synchronized void addCache(String key, CacheEntry ce) {
         addCache(key, ce, DEFAULT_VALIDITY_TIME);
     }
 
@@ -41,7 +41,7 @@ public class CacheTimerHandler {
      * @param ce
      * @param validityTime 有效时间
      */
-    public static synchronized void addCache(String key, CacheEntry1 ce, int validityTime) {
+    public static synchronized void addCache(String key, CacheEntry ce, int validityTime) {
         map.put(key, ce);
         //添加过期定期
         timer.schedule(new TimeoutTimerTask(key), validityTime * SECOND_TIME);
@@ -53,7 +53,7 @@ public class CacheTimerHandler {
      * @param key
      * @return
      */
-    public static synchronized CacheEntry1 getCache(String key) {
+    public static synchronized CacheEntry getCache(String key) {
         return map.get(key);
     }
 

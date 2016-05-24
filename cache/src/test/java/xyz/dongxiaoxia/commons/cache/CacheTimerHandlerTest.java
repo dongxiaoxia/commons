@@ -5,9 +5,9 @@ package xyz.dongxiaoxia.commons.cache;
  */
 public class CacheTimerHandlerTest {
     public static void main(String[] args) {
-        CacheEntry1 ce;
+        CacheEntry ce;
         for (int i = 0;i<1000;i++){
-            ce = new CacheEntry1(i+"",i);
+            ce = new CacheEntry(i+"",i);
             CacheListHandler.addCache(i+"",ce);
         }
     }

@@ -5,23 +5,20 @@ import java.util.Map;
 
 /**
  * Created by dongxiaoxia on 2016/5/15.
+ *
+ * 缓存接口
  */
 public interface Cache<K, V> {
-    String getName();
 
-    V getValue();
+    void put(CacheEntry<K,V> cacheEntry);
 
-    Map<? extends K, ? extends V> getAll(Iterator<? extends K> keys);
+    void put(K k,V v);
 
-    boolean isPresent(K key);
+    void put(K k,V v,int secondsToLive);
 
-    void put(K key,V value);
+    CacheEntry<K,V> remove(K k);
 
-    void invalidate(K key);
-
-    void invalidateAll(Iterator<? extends K> keys);
-
-    void invalidateAll();
+    CacheEntry<K,V> get(K key);
 
     boolean isEmpty();
 
@@ -30,4 +27,6 @@ public interface Cache<K, V> {
     void clear();
 
     Map<? extends K,? extends V> asMap();
+
+    Map<? extends K, ? extends V> getAll(Iterator<? extends K> keys);
 }
