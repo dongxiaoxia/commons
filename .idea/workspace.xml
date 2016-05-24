@@ -2,30 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="52d111aa-b851-4759-92dc-1f86eed2e002" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/checkstyle-idea.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cache/src/main/java/xyz/dongxiaoxia/commons/cache/CacheUtils.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cache/src/main/java/xyz/dongxiaoxia/commons/cache/Cacheable.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cache/src/main/java/xyz/dongxiaoxia/commons/cache/ACache.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cache/src/main/java/xyz/dongxiaoxia/commons/cache/CacheEntry1.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cache/src/main/java/xyz/dongxiaoxia/commons/cache/CacheImpl.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cache/src/main/java/xyz/dongxiaoxia/commons/cache/CacheManager.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cache/target/classes/xyz/dongxiaoxia/commons/cache/CacheImpl.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cache/target/classes/xyz/dongxiaoxia/commons/cache/Cache.class" afterPath="$PROJECT_DIR$/cache/target/classes/xyz/dongxiaoxia/commons/cache/Cache.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cache/target/classes/xyz/dongxiaoxia/commons/cache/CacheEntry.class" afterPath="$PROJECT_DIR$/cache/target/classes/xyz/dongxiaoxia/commons/cache/CacheEntry.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cache/target/classes/xyz/dongxiaoxia/commons/cache/CacheManager$1.class" afterPath="$PROJECT_DIR$/cache/target/classes/xyz/dongxiaoxia/commons/cache/CacheManager$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cache/target/classes/xyz/dongxiaoxia/commons/cache/CacheManager.class" afterPath="$PROJECT_DIR$/cache/target/classes/xyz/dongxiaoxia/commons/cache/CacheManager.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cache/target/test-classes/xyz/dongxiaoxia/commons/cache/CacheManagerTest$1$1.class" afterPath="$PROJECT_DIR$/cache/target/test-classes/xyz/dongxiaoxia/commons/cache/CacheManagerTest$1$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cache/target/test-classes/xyz/dongxiaoxia/commons/cache/CacheManagerTest$1.class" afterPath="$PROJECT_DIR$/cache/target/test-classes/xyz/dongxiaoxia/commons/cache/CacheManagerTest$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cache/target/test-classes/xyz/dongxiaoxia/commons/cache/CacheManagerTest.class" afterPath="$PROJECT_DIR$/cache/target/test-classes/xyz/dongxiaoxia/commons/cache/CacheManagerTest.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cache/src/main/java/xyz/dongxiaoxia/commons/cache/Cache.java" afterPath="$PROJECT_DIR$/cache/src/main/java/xyz/dongxiaoxia/commons/cache/Cache.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cache/src/main/java/xyz/dongxiaoxia/commons/cache/CacheEntry.java" afterPath="$PROJECT_DIR$/cache/src/main/java/xyz/dongxiaoxia/commons/cache/CacheEntry.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cache/src/main/java/xyz/dongxiaoxia/commons/cache/CacheListHandler.java" afterPath="$PROJECT_DIR$/cache/src/main/java/xyz/dongxiaoxia/commons/cache/CacheListHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cache/src/main/java/xyz/dongxiaoxia/commons/cache/CacheTimerHandler.java" afterPath="$PROJECT_DIR$/cache/src/main/java/xyz/dongxiaoxia/commons/cache/CacheTimerHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cache/src/main/java/xyz/dongxiaoxia/commons/cache/SimpleLRUCache.java" afterPath="$PROJECT_DIR$/cache/src/main/java/xyz/dongxiaoxia/commons/cache/SimpleLRUCache.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cache/src/test/java/xyz/dongxiaoxia/commons/cache/CacheListHandlerTest.java" afterPath="$PROJECT_DIR$/cache/src/test/java/xyz/dongxiaoxia/commons/cache/CacheListHandlerTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cache/src/test/java/xyz/dongxiaoxia/commons/cache/CacheManagerTest.java" afterPath="$PROJECT_DIR$/cache/src/test/java/xyz/dongxiaoxia/commons/cache/CacheManagerTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cache/src/test/java/xyz/dongxiaoxia/commons/cache/CacheTimerHandlerTest.java" afterPath="$PROJECT_DIR$/cache/src/test/java/xyz/dongxiaoxia/commons/cache/CacheTimerHandlerTest.java" />
     </list>
     <ignored path="commons.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -1051,7 +1028,7 @@
       <workItem from="1463930676419" duration="3514000" />
       <workItem from="1463966920555" duration="685000" />
       <workItem from="1464011211833" duration="4582000" />
-      <workItem from="1464053900769" duration="28420000" />
+      <workItem from="1464053900769" duration="28479000" />
     </task>
     <task id="LOCAL-00001" summary="cahce模块添加根据时间删除缓存功能">
       <created>1463933565243</created>
@@ -1059,7 +1036,13 @@
       <option name="project" value="LOCAL" />
       <updated>1463933565243</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="cahce模块修改">
+      <created>1464086727604</created>
+      <option name="number" value="00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1464086727604</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1095,7 +1078,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="62019000" />
+    <option name="totallyTimeSpent" value="62078000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -1141,7 +1124,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="cahce模块添加根据时间删除缓存功能" />
-    <option name="LAST_COMMIT_MESSAGE" value="cahce模块添加根据时间删除缓存功能" />
+    <MESSAGE value="cahce模块修改" />
+    <option name="LAST_COMMIT_MESSAGE" value="cahce模块修改" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
