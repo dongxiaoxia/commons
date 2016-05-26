@@ -1,6 +1,5 @@
 package xyz.dongxiaoxia.commons.cache;
 
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -27,6 +26,4 @@ public interface Cache<K, V> {
     void clear();
 
     Map<? extends K,? extends V> asMap();
-
-    Map<? extends K, ? extends V> getAll(Iterator<? extends K> keys);
 }

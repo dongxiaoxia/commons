@@ -17,26 +17,39 @@
       <profile default="true" name="Default" enabled="false">
         <processorPath useClasspath="true" />
       </profile>
-      <profile default="false" name="Maven default annotation processors profile" enabled="true">
+      <profile default="false" name="Annotation profile for cache" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="cache" />
+      </profile>
+      <profile default="false" name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
         <module name="io" />
         <module name="json" />
         <module name="log" />
         <module name="security" />
       </profile>
+      <profile default="false" name="Annotation profile for utils" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="utils" />
+      </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="cache" target="1.5" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="cache" target="1.8" />
       <module name="install" target="1.8" />
       <module name="io" target="1.5" />
       <module name="json" target="1.5" />
       <module name="log" target="1.5" />
       <module name="security" target="1.5" />
-      <module name="utils" target="1.7" />
+      <module name="utils" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -11,11 +11,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author dongxiaoxia
  * @create 2016-05-22 22:36
  */
-public class CacheListHandler<K,V> implements Cache<K,V> {
-    private final ConcurrentHashMap<K, CacheEntry<K,V>> map;
-    private final List<CacheEntry<K,V>> tempList;
+public class CacheListHandler<K, V> implements Cache<K, V> {
+    private final ConcurrentHashMap<K, CacheEntry<K, V>> map;
+    private final List<CacheEntry<K, V>> tempList;
 
-    public CacheListHandler(){
+    public CacheListHandler() {
         tempList = new ArrayList<>();
         map = new ConcurrentHashMap<>(new HashMap<>(1 << 18));
         new Thread(new TimeoutThread()).start();
@@ -23,29 +23,32 @@ public class CacheListHandler<K,V> implements Cache<K,V> {
 
     /**
      * 添加缓存对象
+     *
      * @param key
      * @param value
      */
     @Override
     public synchronized void put(K key, V value) {
-        CacheEntry<K,V> cacheEntry = new CacheEntry<>(key, value);
+        CacheEntry<K, V> cacheEntry = new CacheEntry<>(key, value);
         put(cacheEntry);
     }
 
     /**
      * 添加缓存对象
+     *
      * @param key
      * @param value
      * @param secondsToLive 有效时间，单位：秒
      */
     @Override
     public synchronized void put(K key, V value, int secondsToLive) {
-        CacheEntry<K,V> cacheEntry = new CacheEntry<>(key, value, secondsToLive);
+        CacheEntry<K, V> cacheEntry = new CacheEntry<>(key, value, secondsToLive);
         put(cacheEntry);
     }
 
     /**
      * 添加缓存对象
+     *
      * @param cacheEntry
      */
     @Override
@@ -58,8 +61,9 @@ public class CacheListHandler<K,V> implements Cache<K,V> {
         tempList.add(cacheEntry);
     }
 
-    /**D
+    /**
      * 删除缓存
+     *
      * @param k
      * @return
      */
@@ -69,13 +73,12 @@ public class CacheListHandler<K,V> implements Cache<K,V> {
     }
 
     /**
-     * 获取缓存对象
      * @param key
-     * @return
+     * @return 获取缓存对象
      */
     @Override
-    public CacheEntry<K,V> get(K key){
-        CacheEntry<K,V> cacheEntry = map.get(key);
+    public CacheEntry<K, V> get(K key) {
+        CacheEntry<K, V> cacheEntry = map.get(key);
         if (cacheEntry == null) {
             return null;
         }
@@ -89,7 +92,8 @@ public class CacheListHandler<K,V> implements Cache<K,V> {
 
     /**
      * 判断缓存是否为空
-     * @return
+     *
+     * @return 缓存是否为空
      */
     @Override
     public synchronized boolean isEmpty() {
@@ -98,7 +102,8 @@ public class CacheListHandler<K,V> implements Cache<K,V> {
 
     /**
      * 获取缓存大小
-     * @return  获取缓存大小
+     *
+     * @return 获取缓存大小
      */
     @Override
     public synchronized int size() {
@@ -115,13 +120,21 @@ public class CacheListHandler<K,V> implements Cache<K,V> {
     }
 
     @Override
-    public Map<? extends K, ? extends V> asMap() {
-        return null;
-    }
-
-    @Override
-    public Map<? extends K, ? extends V> getAll(Iterator<? extends K> keys) {
-        return null;
+    public synchronized Map<? extends K, ? extends V> asMap() {
+        Map<K, V> newMap = new HashMap<>();
+        Set<Map.Entry<K, CacheEntry<K, V>>> entrySet = map.entrySet();
+        if (entrySet.size() > 0) {
+            K key;
+            CacheEntry<K, V> cacheEntry;
+            for (Map.Entry<K, CacheEntry<K, V>> entry : entrySet) {
+                key = entry.getKey();
+                cacheEntry = entry.getValue();
+                if (cacheEntry != null && !cacheEntry.isExpired()) {
+                    newMap.put(key, cacheEntry.getValue());
+                }
+            }
+        }
+        return newMap;
     }
 
     class TimeoutThread implements Runnable {
@@ -141,11 +154,10 @@ public class CacheListHandler<K,V> implements Cache<K,V> {
          * 过期缓存的具体处理方法
          */
         private void checkTime() throws InterruptedException {
-            CacheEntry<K,V> tce;
-            long timeoutTime = 1000L;
+            CacheEntry<K, V> tce;
+            long timeoutTime =5 * 1000L;
             if (1 > tempList.size()) {
-                Logger.info("过期队列空，开始轮询");
-                timeoutTime = 1000L;
+                Logger.debug("过期队列空，开始轮询缓存");
                 Thread.sleep(timeoutTime);
                 return;
             }
@@ -154,7 +166,7 @@ public class CacheListHandler<K,V> implements Cache<K,V> {
                 Thread.sleep(timeoutTime);
                 return;
             }
-            Logger.info("清除过期缓存：" + tce.getKey());
+           // Logger.debug("清除过期缓存：" + tce.getKey());
             //清除过期缓存和删除对应的缓存队列
             tempList.remove(tce);
             remove(tce.getKey());

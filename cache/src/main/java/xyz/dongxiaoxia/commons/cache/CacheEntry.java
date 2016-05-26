@@ -1,9 +1,6 @@
 package xyz.dongxiaoxia.commons.cache;
 
-import xyz.dongxiaoxia.commons.logging.Logger;
-
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @author dongxiaoxia
@@ -13,7 +10,7 @@ public class CacheEntry<K, V> implements Cacheable<K>,Serializable{
 
     private static final long serialVersionUID = -3971709196436977492L;
     private static final long SECOND_TIME = 1000;
-    private final int DEFAULT_VALIDITY_TIME = 20;//默认时间 20秒
+    private final int DEFAULT_VALIDITY_TIME = 60;//默认时间 20秒
 
     private long expirationTime;
     private K key;
@@ -43,10 +40,10 @@ public class CacheEntry<K, V> implements Cacheable<K>,Serializable{
     public boolean isExpired() {
         if (expirationTime != 0) {
             if (System.currentTimeMillis() > expirationTime) {
-                Logger.info("CacheResultSet.isExpired: Expired from Cache!EXPIRED TIME:" + new Date(expirationTime).toString() + " CURRENT TIME:" + new Date().toString());
+              //  Logger.debug("CacheResultSet.isExpired: Expired from Cache!EXPIRED TIME:" + new Date(expirationTime).toString() + " CURRENT TIME:" + new Date().toString());
                 return true;
             } else {
-                Logger.info("CacheResultSet.isExpired: Expired not from Cache!");
+             //   Logger.debug("CacheResultSet.isExpired: Expired not from Cache!");
                 return false;
             }
         } else {
