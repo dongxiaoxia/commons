@@ -1,6 +1,7 @@
 package xyz.dongxiaoxia.commons.cache.mybatis;
 
 import org.junit.Test;
+import xyz.dongxiaoxia.commons.cache.mybatis.decorators.FifoCache;
 import xyz.dongxiaoxia.commons.cache.mybatis.decorators.LoggingCache;
 import xyz.dongxiaoxia.commons.cache.mybatis.impl.PerpetualCache;
 
@@ -10,8 +11,26 @@ import xyz.dongxiaoxia.commons.cache.mybatis.impl.PerpetualCache;
 public class CacheTest {
 
     @Test
-    public void test(){
+    public void testLoggingCache(){
         Cache cache = new LoggingCache(new PerpetualCache("test"));
+        System.out.println(cache.getId());
+        for (int i = 0;i<100;i++){
+            cache.putObject(String.valueOf(i),Math.random());
+        }
+        System.out.println(cache.getSize());
+        System.out.println(cache.getObject("23"));
+        System.out.println(cache.removeObject("23"));
+        System.out.println(cache.getObject("23"));
+        cache.clear();
+        System.out.println(cache.getSize());
+        System.out.println(cache.getObject("23"));
+
+    }
+
+    @Test
+    public void testFifoCache(){
+        FifoCache cache = new FifoCache(new LoggingCache(new PerpetualCache("test")));
+        cache.setSize(10);
         System.out.println(cache.getId());
         for (int i = 0;i<100;i++){
             cache.putObject(String.valueOf(i),Math.random());
