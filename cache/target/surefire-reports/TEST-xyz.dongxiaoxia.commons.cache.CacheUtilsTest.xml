@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="1" failures="0" name="xyz.dongxiaoxia.commons.cache.CacheManagerTest" time="0.194" errors="0" skipped="0">
+<testsuite tests="1" failures="0" name="xyz.dongxiaoxia.commons.cache.CacheUtilsTest" time="0.076" errors="1" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_45\jre\bin"/>
@@ -20,7 +20,7 @@
     <property name="basedir" value="D:\GitHub\commons\cache"/>
     <property name="java.endorsed.dirs" value="C:\Program Files\Java\jdk1.8.0_45\jre\lib\endorsed"/>
     <property name="os.arch" value="amd64"/>
-    <property name="surefire.real.class.path" value="C:\Users\CHENZH~1\AppData\Local\Temp\surefirebooter2348145134112800438.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\CHENZH~1\AppData\Local\Temp\surefirebooter2359987530208814918.jar"/>
     <property name="java.io.tmpdir" value="C:\Users\CHENZH~1\AppData\Local\Temp\"/>
     <property name="line.separator" value="
 "/>
@@ -29,7 +29,7 @@
     <property name="os.name" value="Windows 8.1"/>
     <property name="sun.jnu.encoding" value="GBK"/>
     <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_45\jre\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\Java\jdk1.8.0_45\bin;D:\Android\adt-bundle-windows-x86_64-20130917\sdk\tools??D:\Android\adt-bundle-windows-x86_64-20130917\sdk\platform-tools??C:\Program Files\Java\jre1.8.0_45\bin;%;ystemRoot%\system32??D:\Android\adt-bundle-windows-x86_64-20130917\sdk\platform-tools??c:\windows\system32;C;\strawberry\c\bin;C:\strawberry\perl\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\system32\wbem;D:\tomcat\apache-tomcat-7.0.68\lib;D:\tomcat\apache-tomcat-7.0.68\lib\servlet-api.jar;D:\tomcat\apache-tomcat-7.0.68\lib\jsp-api.jar;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;D:\maven\apache-maven-3.3.9\bin;D:\program\Git\cmd;D:\program\svn\bin;C:\Android;C:\Windows\System32;D:\program\nodejs\;C:\Users\chenzhihua\AppData\Roaming\npm;."/>
-    <property name="surefire.test.class.path" value="D:\GitHub\commons\cache\target\test-classes;D:\GitHub\commons\cache\target\classes;D:\maven\repository\junit\junit\4.12\junit-4.12.jar;D:\maven\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;"/>
+    <property name="surefire.test.class.path" value="D:\GitHub\commons\cache\target\test-classes;D:\GitHub\commons\cache\target\classes;D:\maven\repository\junit\junit\4.12\junit-4.12.jar;D:\maven\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;D:\maven\repository\xyz\dongxiaoxia\commons\log\0.0.1-SNAPSHOT\log-0.0.1-SNAPSHOT.jar;D:\maven\repository\log4j\log4j\1.2.17\log4j-1.2.17.jar;D:\maven\repository\xyz\dongxiaoxia\commons\utils\0.0.1-SNAPSHOT\utils-0.0.1-SNAPSHOT.jar;D:\maven\repository\org\slf4j\slf4j-log4j12\1.7.21\slf4j-log4j12-1.7.21.jar;D:\maven\repository\org\slf4j\slf4j-api\1.7.21\slf4j-api-1.7.21.jar;"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.class.version" value="52.0"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
@@ -40,11 +40,11 @@
     <property name="java.specification.version" value="1.8"/>
     <property name="file.encoding" value="UTF-8"/>
     <property name="user.name" value="chenzhihua"/>
-    <property name="java.class.path" value="D:\GitHub\commons\cache\target\test-classes;D:\GitHub\commons\cache\target\classes;D:\maven\repository\junit\junit\4.12\junit-4.12.jar;D:\maven\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;"/>
+    <property name="java.class.path" value="D:\GitHub\commons\cache\target\test-classes;D:\GitHub\commons\cache\target\classes;D:\maven\repository\junit\junit\4.12\junit-4.12.jar;D:\maven\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;D:\maven\repository\xyz\dongxiaoxia\commons\log\0.0.1-SNAPSHOT\log-0.0.1-SNAPSHOT.jar;D:\maven\repository\log4j\log4j\1.2.17\log4j-1.2.17.jar;D:\maven\repository\xyz\dongxiaoxia\commons\utils\0.0.1-SNAPSHOT\utils-0.0.1-SNAPSHOT.jar;D:\maven\repository\org\slf4j\slf4j-log4j12\1.7.21\slf4j-log4j12-1.7.21.jar;D:\maven\repository\org\slf4j\slf4j-api\1.7.21\slf4j-api-1.7.21.jar;"/>
     <property name="java.vm.specification.version" value="1.8"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.home" value="C:\Program Files\Java\jdk1.8.0_45\jre"/>
-    <property name="sun.java.command" value="C:\Users\CHENZH~1\AppData\Local\Temp\surefirebooter2348145134112800438.jar C:\Users\CHENZH~1\AppData\Local\Temp\surefire2452167053651516676tmp C:\Users\CHENZH~1\AppData\Local\Temp\surefire8706786392008444686tmp"/>
+    <property name="sun.java.command" value="C:\Users\CHENZH~1\AppData\Local\Temp\surefirebooter2359987530208814918.jar C:\Users\CHENZH~1\AppData\Local\Temp\surefire4245054395475237677tmp C:\Users\CHENZH~1\AppData\Local\Temp\surefire7035130154029431502tmp"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
     <property name="user.language" value="zh"/>
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
@@ -61,5 +61,28 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="xyz.dongxiaoxia.commons.cache.CacheManagerTest" name="test" time="0.105"/>
+  <testcase classname="xyz.dongxiaoxia.commons.cache.CacheUtilsTest" name="initializationError" time="0.002">
+    <error message="No runnable methods" type="java.lang.Exception">java.lang.Exception: No runnable methods
+	at org.junit.runners.BlockJUnit4ClassRunner.validateInstanceMethods(BlockJUnit4ClassRunner.java:191)
+	at org.junit.runners.BlockJUnit4ClassRunner.collectInitializationErrors(BlockJUnit4ClassRunner.java:128)
+	at org.junit.runners.ParentRunner.validate(ParentRunner.java:416)
+	at org.junit.runners.ParentRunner.&lt;init&gt;(ParentRunner.java:84)
+	at org.junit.runners.BlockJUnit4ClassRunner.&lt;init&gt;(BlockJUnit4ClassRunner.java:65)
+	at org.junit.internal.builders.JUnit4Builder.runnerForClass(JUnit4Builder.java:10)
+	at org.junit.runners.model.RunnerBuilder.safeRunnerForClass(RunnerBuilder.java:59)
+	at org.junit.internal.builders.AllDefaultPossibilitiesBuilder.runnerForClass(AllDefaultPossibilitiesBuilder.java:26)
+	at org.junit.runners.model.RunnerBuilder.safeRunnerForClass(RunnerBuilder.java:59)
+	at org.junit.internal.requests.ClassRequest.getRunner(ClassRequest.java:33)
+	at org.apache.maven.surefire.junit4.JUnit4TestSet.execute(JUnit4TestSet.java:51)
+	at org.apache.maven.surefire.suite.AbstractDirectoryTestSuite.executeTestSet(AbstractDirectoryTestSuite.java:115)
+	at org.apache.maven.surefire.suite.AbstractDirectoryTestSuite.execute(AbstractDirectoryTestSuite.java:102)
+	at org.apache.maven.surefire.Surefire.run(Surefire.java:180)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.apache.maven.surefire.booter.SurefireBooter.runSuitesInProcess(SurefireBooter.java:350)
+	at org.apache.maven.surefire.booter.SurefireBooter.main(SurefireBooter.java:1021)
+</error>
+  </testcase>
 </testsuite>
