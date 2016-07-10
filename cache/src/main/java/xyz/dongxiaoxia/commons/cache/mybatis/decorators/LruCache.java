@@ -58,7 +58,7 @@ public class LruCache implements Cache {
         this.keyMap = new LinkedHashMap<String, Object>(size, 0.75F, true) {
             private static final long serialVersionUID = 4267176411845948333L;
 
-            protected boolean removeEldestEntry(Entry<String, Object> eldest) {
+            protected boolean removeEldestEntry(Map.Entry<String, Object> eldest) {
                 boolean tooBig = this.size() > size;
                 if (tooBig) {
                     LruCache.this.eldestKey = eldest.getKey();

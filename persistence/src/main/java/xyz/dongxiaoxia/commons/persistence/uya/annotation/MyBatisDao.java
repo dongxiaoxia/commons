@@ -1,4 +1,4 @@
-package xyz.dongxiaoxia.commons.persistence.annotation;
+package xyz.dongxiaoxia.commons.persistence.uya.annotation;
 
 import org.springframework.stereotype.Component;
 

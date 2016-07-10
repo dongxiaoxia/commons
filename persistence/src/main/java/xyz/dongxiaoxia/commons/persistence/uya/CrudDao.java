@@ -1,4 +1,4 @@
-package xyz.dongxiaoxia.commons.persistence;
+package xyz.dongxiaoxia.commons.persistence.uya;
 
 import java.util.List;
 

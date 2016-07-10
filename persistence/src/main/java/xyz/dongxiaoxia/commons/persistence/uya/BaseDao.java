@@ -1,4 +1,4 @@
-package xyz.dongxiaoxia.commons.persistence;
+package xyz.dongxiaoxia.commons.persistence.uya;
 
 /*
  * Created by dongxiaoxia on 2016/7/7.

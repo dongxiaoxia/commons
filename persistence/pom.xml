@@ -6,18 +6,23 @@
 
     <groupId>xyz.dongxiaoxia.commons</groupId>
     <artifactId>persistence</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>${project_version}</version>
+
+    <parent>
+        <groupId>xyz.dongxiaoxia.commons</groupId>
+        <artifactId>install</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../install/pom.xml</relativePath>
+    </parent>
 
     <!-- 项目属性 -->
     <properties>
         <!-- main version setting -->
-        <spring.version>4.0.8.RELEASE</spring.version>
-        <validator.version>5.1.1.Final</validator.version>
+        <spring.version>4.1.7.RELEASE</spring.version>
         <mybatis.version>3.2.8</mybatis.version>
         <mybatis-spring.version>1.2.2</mybatis-spring.version>
+        <!--Druid数据库连接池-->
         <druid.version>1.0.18</druid.version>
-        <ehcache.version>2.6.9</ehcache.version>
-        <ehcache-web.version>2.0.4</ehcache-web.version>
         <!-- jdbc driver setting -->
         <mysql.driver.version>5.1.30</mysql.driver.version>
     </properties>
@@ -25,16 +30,15 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>4.1.7.RELEASE</version>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>4.1.7.RELEASE</version>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring.version}</version>
         </dependency>
         <!-- PERSISTENCE begin -->
-
         <!-- MyBatis -->
         <dependency>
             <groupId>org.mybatis</groupId>
@@ -46,7 +50,6 @@
             <artifactId>mybatis-spring</artifactId>
             <version>${mybatis-spring.version}</version>
         </dependency>
-
         <!-- jdbc driver -->
         <dependency>
             <groupId>mysql</groupId>
@@ -54,8 +57,18 @@
             <version>${mysql.driver.version}</version>
             <scope>runtime</scope>
         </dependency>
+        <!-- 数据库连接池 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${druid.version}</version>
+        </dependency>
         <!-- PERSISTENCE end -->
+        <dependency>
+            <groupId>xyz.dongxiaoxia.commons</groupId>
+            <artifactId>utils</artifactId>
+            <version>${project_version}</version>
+        </dependency>
     </dependencies>
-
 
 </project>
