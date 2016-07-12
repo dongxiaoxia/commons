@@ -1,5 +1,6 @@
 package xyz.dongxiaoxia.commons.utils.config;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.NoSuchElementException;
@@ -159,7 +160,8 @@ public class PropertiesLoader {
             logger.info("Loading properties file from:" + location);
             InputStreamReader inputStreamReader = null;
             try {
-                inputStreamReader = new InputStreamReader(PropertiesLoader.class.getClassLoader().getResourceAsStream(location), "UTF-8");
+//                inputStreamReader = new InputStreamReader(PropertiesLoader.class.getClassLoader().getResourceAsStream(location), "UTF-8");// TODO: 2016/7/12 怎么获取第三方包的文件
+                inputStreamReader = new InputStreamReader(new FileInputStream(location),"UTF-8");
                 pros.load(inputStreamReader);
             } catch (Exception e) {
                 logger.info("Could not load properties from path:" + location + "," + e.getMessage());
