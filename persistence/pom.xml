@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>xyz.dongxiaoxia.commons</groupId>
+    <artifactId>persistence</artifactId>
+    <version>${project_version}</version>
+
+    <parent>
+        <groupId>xyz.dongxiaoxia.commons</groupId>
+        <artifactId>install</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../install/pom.xml</relativePath>
+    </parent>
+
+    <!-- 项目属性 -->
+    <properties>
+        <!-- main version setting -->
+        <spring.version>4.1.7.RELEASE</spring.version>
+        <mybatis.version>3.2.8</mybatis.version>
+        <mybatis-spring.version>1.2.2</mybatis-spring.version>
+        <!--Druid数据库连接池-->
+        <druid.version>1.0.18</druid.version>
+        <!-- jdbc driver setting -->
+        <mysql.driver.version>5.1.30</mysql.driver.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- PERSISTENCE begin -->
+        <!-- MyBatis -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>${mybatis-spring.version}</version>
+        </dependency>
+        <!-- jdbc driver -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.driver.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- 数据库连接池 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${druid.version}</version>
+        </dependency>
+        <!-- PERSISTENCE end -->
+        <dependency>
+            <groupId>xyz.dongxiaoxia.commons</groupId>
+            <artifactId>utils</artifactId>
+            <version>${project_version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jyaml/jyaml -->
+        <dependency>
+            <groupId>org.jyaml</groupId>
+            <artifactId>jyaml</artifactId>
+            <version>1.3</version>
+        </dependency>
+
+    </dependencies>
+
+</project>
