@@ -1,9 +1,6 @@
 package xyz.dongxiaoxia.commons.utils;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
@@ -67,11 +64,12 @@ public class PropertiesUtils {
         //以下方法读取属性文件会缓存问题
 //		InputStream in = PropertiesUtils.class
 //				.getResourceAsStream("/config.properties");
-        try {
-            InputStream in = new BufferedInputStream(new FileInputStream(savePath));
+        try (InputStream in = new BufferedInputStream(new FileInputStream(savePath));) {
             prop.load(in);
-        } catch (Exception e) {
-            return null;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return prop;
     }
@@ -88,11 +86,12 @@ public class PropertiesUtils {
             Properties prop = getProperties();
             prop.setProperty(key, value);
             String path = PropertiesUtils.class.getResource("/config.properties").getPath();
-            FileOutputStream outputFile = new FileOutputStream(path);
-            prop.store(outputFile, "modify");
-            outputFile.close();
-            outputFile.flush();
+            try (FileOutputStream outputFile = new FileOutputStream(path);){
+                prop.store(outputFile, "modify");
+                outputFile.flush();
+            }
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

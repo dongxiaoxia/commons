@@ -23,22 +23,22 @@ public class SwapConnectionPool extends ConnectionPool {
         return -1;
     }
 
-    public int GetFreeConnCount()
+    public int getFreeConnCount()
     {
         return -1;
     }
 
-    public synchronized Connection Get() throws Exception
+    public synchronized Connection get() throws Exception
     {
         return dataSource.getConnection();
     }
 
-    public synchronized void Release(Connection connection)
+    public synchronized void release(Connection connection)
     {
         JdbcUtil.closeConnection(connection);
     }
 
     public Connection GetReadConnection() throws Exception {
-        return dataSource.GetReadConnection();
+        return dataSource.getReadConnection();
     }
 }

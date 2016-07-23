@@ -10,6 +10,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.List;
 
+/**
+ * 存储过程Statement
+ */
 public class ProcCSCreater extends PSCreaterBase {
 
 	
@@ -26,8 +29,8 @@ public class ProcCSCreater extends PSCreaterBase {
 			if(des != null) {
 				StringBuffer sbSql = new StringBuffer("{call ");
 				sbSql.append(des.delete());
-				sbSql.append("(?,?,?)");
-				sbSql.append("}");
+                sbSql.append("(?,?,?)");
+                sbSql.append("}");
 	
 				sql.setSql(sbSql.toString());
 				String columnName = Common.getDBCloumnName(clazz, fieldList.get(0));

@@ -23,8 +23,6 @@ public class Common {
 
     private static Map<Class<?>, ClassInfo> classInfoCache = new HashMap<>();
 
-    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
 
     private static ClassInfo getClassInfo(Class<?> clazz) {
         ClassInfo classInfo = classInfoCache.get(clazz);
@@ -258,7 +256,7 @@ public class Common {
         Class<?> clazz = bean.getClass();
         Method m = getGetterMethod(clazz, f);
         if(m == null) {
-            System.out.println("method is null fn:"+f.getName() + "---"+ bean.toString());
+            throw new NullPointerException("method is null fn:"+f.getName() + "---"+ bean.toString());
         }
         Object value = m.invoke(bean, new Object[] {});
         if(value != null){
@@ -378,7 +376,7 @@ public class Common {
             if (valueObj == null) {
                 retValue = "''";
             } else {
-                retValue = "'" + sdf.format(valueObj) + "'";
+                retValue = "'" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(valueObj) + "'";
             }
         } else if(valueType.equals(boolean.class)
                 || valueType.equals(Boolean.class)){

@@ -25,7 +25,12 @@ public class IDGen {
      * @return
      */
     public static long randomLong(){
-        return Math.abs(random.nextLong());
+        long result = Math.abs(random.nextLong());
+        if (result < 0){
+            return randomLong();
+        }
+        else
+            return result;
     }
 
     public static void main(String[] args){

@@ -2,7 +2,6 @@ package xyz.dongxiaoxia.commons.persistence.uya.jdbc.basedao;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import xyz.dongxiaoxia.commons.persistence.uya.jdbc.dbconnectionpool.ConnectionPool;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.statementcreater.IStatementCreater;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.statementcreater.MysqlPSCreater;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.statementcreater.SqlServerPSCreater;
@@ -24,25 +23,15 @@ public class DAOHelper {
     public IDAO sql = null;
 
     /**
-     * exec proc handle
+     * exec proc handle（存储过程）
      */
     public IDAO proc = null;
 
-
-//	public DAOHelper(ConnectionPool connPool){
-//		this.connPool = connPool;
-//	}
+    private ConnectionHelper connHelper;
 
     public DAOHelper(ConnectionHelper connHelper) {
         this.connHelper = connHelper;
     }
-
-    private ConnectionHelper connHelper;
-    @Deprecated
-    public ConnectionPool getConnPool(){
-        return connHelper.getConnPool();
-    }
-
 
     public ConnectionHelper getConnHelper() {
         return this.connHelper;
@@ -63,8 +52,7 @@ public class DAOHelper {
         } catch (Exception e) {
             log.error("execQuery error sql:" + sql, e);
             throw e;
-        }
-        finally{
+        } finally {
             JdbcUtil.closeStatement(ps);
             connHelper.release(conn);
         }
@@ -75,19 +63,14 @@ public class DAOHelper {
         ResultSet rs = null;
         Statement stmt = null;
         try {
-            // 2011-05-24 使用只读连接
-//			conn = connHelper.get();
             conn = connHelper.getReadConnection();
-
-
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
             return handler.exec(rs);
         } catch (Exception e) {
             log.error("execQuery error sql:" + sql, e);
             throw e;
-        }
-        finally{
+        } finally {
             JdbcUtil.closeResultSet(rs);
             JdbcUtil.closeStatement(stmt);
             connHelper.release(conn);
@@ -104,8 +87,7 @@ public class DAOHelper {
         } catch (SQLException e) {
             log.error("execCustomProc error " + sql);
             throw e;
-        }
-        finally{
+        } finally {
             JdbcUtil.closeStatement(cs);
             connHelper.release(conn);
         }
@@ -128,8 +110,7 @@ public class DAOHelper {
         } catch (SQLException e) {
             log.error("execCustomProc error " + sql);
             throw e;
-        }
-        finally{
+        } finally {
             try {
                 conn.commit();
             } catch (Exception e) {
@@ -143,6 +124,7 @@ public class DAOHelper {
 
     /**
      * 执行事务任务
+     *
      * @param tran
      * @throws Exception
      */
@@ -154,7 +136,7 @@ public class DAOHelper {
             tran.exec();
             //事务提交
             commitTransaction();
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             //事务回滚
             rollbackTransaction();
 
@@ -167,6 +149,7 @@ public class DAOHelper {
 
     /**
      * 开启事务(默认级别TRANSACTION_READ_COMMITTED)
+     *
      * @throws Exception
      */
     public void beginTransaction() throws Exception {
@@ -175,18 +158,19 @@ public class DAOHelper {
 
     /**
      * 开启事务
+     *
      * @param level 事务级别
      * @throws Exception
      */
     public void beginTransaction(int level) throws Exception {
         Connection conn = connHelper.get();
-        if(conn != null) {
+        if (conn != null) {
             try {
                 conn.setAutoCommit(false);
                 conn.setTransactionIsolation(level);
                 connHelper.lockConn(conn);
-            } catch(Exception ex) {
-                log.error(ex.getMessage(),ex);
+            } catch (Exception ex) {
+                log.error(ex.getMessage(), ex);
             }
         } else {
             throw new Exception("conn is null when beginTransaction");
@@ -195,11 +179,12 @@ public class DAOHelper {
 
     /**
      * 提交事务
+     *
      * @throws Exception
      */
     public void commitTransaction() throws Exception {
         Connection conn = connHelper.get();
-        if(conn != null) {
+        if (conn != null) {
             conn.commit();
         } else {
             throw new Exception("conn is null when commitTransaction");
@@ -208,11 +193,12 @@ public class DAOHelper {
 
     /**
      * 回滚事务
+     *
      * @throws Exception
      */
     public void rollbackTransaction() throws Exception {
         Connection conn = connHelper.get();
-        if(conn != null) {
+        if (conn != null) {
             conn.rollback();
         } else {
             throw new Exception("conn is null when rollbackTransaction");
@@ -221,17 +207,18 @@ public class DAOHelper {
 
     /**
      * 结束事务
+     *
      * @throws Exception
      */
     public void endTransaction() throws Exception {
         Connection conn = connHelper.get();
-        if(conn != null) {
-            try{
+        if (conn != null) {
+            try {
                 //恢复默认
                 conn.setAutoCommit(true);
                 conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 
-            }finally{
+            } finally {
                 connHelper.unLockConn();
                 connHelper.release(conn);
             }

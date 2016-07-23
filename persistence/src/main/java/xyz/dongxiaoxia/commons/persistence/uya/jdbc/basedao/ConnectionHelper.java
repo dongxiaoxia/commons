@@ -8,9 +8,12 @@ import xyz.dongxiaoxia.commons.persistence.uya.jdbc.dbconnectionpool.DBConfig;
 import xyz.dongxiaoxia.commons.utils.config.PropertiesLoader;
 
 import java.io.File;
+import java.net.URL;
 import java.sql.Connection;
 
 /**
+ * 数据库连接帮助类
+ *
  * @author dongxiaoxia
  * @create 2016-07-11 14:35
  */
@@ -22,9 +25,10 @@ public class ConnectionHelper {
 
     private final ThreadLocal<Connection> threadLocal = new ThreadLocal<>();
 
-    public ConnectionHelper(String configPath) throws Exception {
-        log.info("creating DAOHelper configPath:" + configPath);
-        PropertiesLoader propertiesLoader = new PropertiesLoader(configPath);
+    public ConnectionHelper(URL url) throws Exception {
+        String configPath = url.getPath();
+        log.info("creating ConnectionHelper configPath:" + configPath);
+        PropertiesLoader propertiesLoader = new PropertiesLoader(url.openStream());
         log.info("init ConnectionPool...");
 
         //提供数据库切换功能
@@ -38,8 +42,8 @@ public class ConnectionHelper {
         } else {
             connPool = createConnPool(propertiesLoader);
         }
-        log.info("init ConnectionPool success connection count:" + connPool.GetAllCount());
-        if (connPool.GetAllCount() == 0) {
+        log.info("init ConnectionPool success connection count:" + connPool.getAllCount());
+        if (connPool.getAllCount() == 0) {
             log.warn("success create 0 connection,please check config!!!");
         }
     }
@@ -59,28 +63,37 @@ public class ConnectionHelper {
     /**
      * 创建连接池
      *
-     * @param propertiesLoader
+     * @param loader
      * @return
      */
-    private ConnectionPool createConnPool(PropertiesLoader propertiesLoader) {
-        log.debug("ConnectionPool ConnectionURL:" + propertiesLoader.getProperty("ConnectionURL"));
-        log.debug("ConnectionPool DriversClass:" + propertiesLoader.getProperty("DriversClass"));
+    private ConnectionPool createConnPool(PropertiesLoader loader) {
+        String url = loader.getProperty("url");
+        String driver = loader.getProperty("driver");
+        String username = loader.getProperty("username");
+        String password = loader.getProperty("password");
+        int minPoolSize = loader.getInterger("minPoolSize");
+        int maxPoolSize = loader.getInterger("maxPoolSize");
+        int idleTimeOut = loader.getInterger("idleTimeOut");
+        boolean autoShrink = loader.getBoolean("autoShrink");
+
+        log.debug("ConnectionPool URL:" + url);
+        log.debug("ConnectionPool Driver:" + driver);
         log.debug("ConnectionPool UserName:***");
         log.debug("ConnectionPool PassWord:***");
-        log.debug("ConnectionPool MinPoolSize:" + propertiesLoader.getProperty("MinPoolSize"));
-        log.debug("ConnectionPool MaxPoolSize:" + propertiesLoader.getProperty("MaxPoolSize"));
-        log.debug("ConnectionPool IdleTimeout:" + propertiesLoader.getProperty("IdleTimeout"));
-        log.debug("ConnectionPool AutoShrink:" + propertiesLoader.getProperty("AutoShrink"));
+        log.debug("ConnectionPool MinPoolSize:" + minPoolSize);
+        log.debug("ConnectionPool MaxPoolSize:" + maxPoolSize);
+        log.debug("ConnectionPool IdleTimeout:" + idleTimeOut);
+        log.debug("ConnectionPool AutoShrink:" + autoShrink);
 
         DBConfig dbConfig = new DBConfig();
-        dbConfig.setConnectionUrl(propertiesLoader.getProperty("ConnectionURL"));
-        dbConfig.setDriversClass(propertiesLoader.getProperty("DriversClass"));
-        dbConfig.setUsername(propertiesLoader.getProperty("UserName"));
-        dbConfig.setPassword(propertiesLoader.getProperty("PassWord"));
-        dbConfig.setMinPoolSize(propertiesLoader.getInterger("MinPoolSize"));
-        dbConfig.setMaxPoolSize(propertiesLoader.getInterger("MaxPoolSize"));
-        dbConfig.setIdleTimeOut(propertiesLoader.getInterger("IdleTimeout"));
-        dbConfig.setAutoShrink(propertiesLoader.getBoolean("AutoShrink"));
+        dbConfig.setUrl(url);
+        dbConfig.setDriver(driver);
+        dbConfig.setUsername(username);
+        dbConfig.setPassword(password);
+        dbConfig.setMinPoolSize(minPoolSize);
+        dbConfig.setMaxPoolSize(maxPoolSize);
+        dbConfig.setIdleTimeOut(idleTimeOut);
+        dbConfig.setAutoShrink(autoShrink);
         return new ConnectionPool(dbConfig);
     }
 
@@ -106,7 +119,7 @@ public class ConnectionHelper {
     public Connection get() throws Exception {
         Connection conn = threadLocal.get();
         if (conn == null) {
-            conn = connPool.Get();
+            conn = connPool.get();
         }
         return conn;
     }
@@ -134,7 +147,7 @@ public class ConnectionHelper {
         Connection tconn = threadLocal.get();
         if (tconn == null || (tconn != null && (tconn.hashCode() != conn.hashCode()))) {
             log.debug("this conn is release " + conn);
-            connPool.Release(conn);
+            connPool.release(conn);
         }
     }
 }

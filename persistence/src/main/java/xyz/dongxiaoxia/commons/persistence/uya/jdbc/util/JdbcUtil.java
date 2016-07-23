@@ -24,7 +24,7 @@ public class JdbcUtil {
         } catch (SQLException e) {
             log.error("Could not close JDBC Connection", e);
         } catch (Throwable e) {
-            log.error("Unexpected exception on closing JDBC Connection", e);
+            log.error("Unexpected exceptions on closing JDBC Connection", e);
         }
     }
 
@@ -37,7 +37,7 @@ public class JdbcUtil {
         } catch (SQLException e) {
             log.error("Could not close JDBC Statement", e);
         } catch (Throwable e) {
-            log.error("Unexpected exception on closing JDBC Statement", e);
+            log.error("Unexpected exceptions on closing JDBC Statement", e);
         }
     }
 
@@ -50,7 +50,7 @@ public class JdbcUtil {
         } catch (SQLException ex) {
             log.error("Could not close JDBC ResultSet", ex);
         } catch (Throwable ex) {
-            log.error("Unexpected exception on closing JDBC ResultSet", ex);
+            log.error("Unexpected exceptions on closing JDBC ResultSet", ex);
         }
     }
 

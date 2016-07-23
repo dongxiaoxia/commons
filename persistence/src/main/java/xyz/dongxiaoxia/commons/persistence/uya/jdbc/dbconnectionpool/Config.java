@@ -4,6 +4,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -11,6 +12,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,11 +51,11 @@ public class Config {
 			server.setDriverClass(driversClassNode.getTextContent());
 			server.setUserName(userNameNode.getTextContent());
 			server.setPassWord(passWordNode.getTextContent());
-			server.setMinPoolSize(Integer.valueOf(minPoolSizeNode.getTextContent()));
-			server.setMaxPoolSize(Integer.valueOf(maxPoolSizeNode.getTextContent()));
-			server.setIdleTimeout(Integer.valueOf(idleTimeoutNode.getTextContent()));
-			server.setAutoShrink(Boolean.valueOf(autoShrinkNode.getTextContent()));
-			server.setSlaverForbid(Boolean.valueOf(slaverForbid.getTextContent()));
+			server.setMinPoolSize(Integer.parseInt(minPoolSizeNode.getTextContent()));
+			server.setMaxPoolSize(Integer.parseInt(maxPoolSizeNode.getTextContent()));
+			server.setIdleTimeout(Integer.parseInt(idleTimeoutNode.getTextContent()));
+			server.setAutoShrink(Boolean.parseBoolean(autoShrinkNode.getTextContent()));
+			server.setSlaverForbid(Boolean.parseBoolean(slaverForbid.getTextContent()));
 			
 			Node mfNode = masterAddressNode.getAttributes().getNamedItem("forbid");
 			if(mfNode != null) {
@@ -79,19 +81,19 @@ public class Config {
 
     private static Element getXmlDoc(String filePath) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = null;
+        DocumentBuilder db ;
+		Document doc = null;
         try {
             db = dbf.newDocumentBuilder();
+			doc = db.parse(filePath);
         } catch (ParserConfigurationException pce) {
         	pce.printStackTrace();
-        }
-        Document doc = null;
-        try {
-            doc = db.parse(filePath);
-        } catch (Exception e) {
-        	e.printStackTrace();
-        }
-        return (Element) doc.getDocumentElement();
+        } catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        return doc == null? null:doc.getDocumentElement();
     }
 	
 	public static class Server {

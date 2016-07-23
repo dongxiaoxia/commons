@@ -37,7 +37,7 @@ public interface DbMonitor {
      * Called when the connection is about to be completely removed from the
      * pool. Careful with this hook; the connection might be marked as being
      * broken. Use connection.isPossiblyBroken() to determine if the connection
-     * has triggered an exception at some point.
+     * has triggered an exceptions at some point.
      *
      * @param connection
      */
@@ -60,8 +60,8 @@ public interface DbMonitor {
 
 
     /**
-     * Called whenever an exception on a connection occurs. This exception may be a connection failure, a DB failure or a
-     * non-fatal logical failure (eg Duplicate key exception).
+     * Called whenever an exceptions on a connection occurs. This exceptions may be a connection failure, a DB failure or a
+     * non-fatal logical failure (eg Duplicate key exceptions).
      * <p>
      * <p>SQLSTATE Value
      * <p>Value	Meaning
@@ -84,7 +84,7 @@ public interface DbMonitor {
      * @param t          Exception that caused this failure.
      * @return Returning true means: when you eventually close off this connection, test to see if the connection is still
      * alive and discard it if not (this is the normal behaviour). Returning false pretends that the connection is still ok
-     * when the connection is closed (your application will still receive the original exception that was thrown).
+     * when the connection is closed (your application will still receive the original exceptions that was thrown).
      */
     void onException(DbDataSource ds, ConnectionWrapper connection, Throwable t);
 

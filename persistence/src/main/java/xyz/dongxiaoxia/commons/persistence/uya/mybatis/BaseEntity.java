@@ -76,10 +76,10 @@ public abstract class BaseEntity<T> implements Serializable {
 //        this.currentUser = currentUser;
 //    }
 
-//    @JsonIgnore
+    //    @JsonIgnore
 //    @XmlTransient
     public Page<T> getPage() {
-        if (page == null){
+        if (page == null) {
             page = new Page<T>();
         }
         return page;
@@ -90,10 +90,10 @@ public abstract class BaseEntity<T> implements Serializable {
         return page;
     }
 
-//    @JsonIgnore
+    //    @JsonIgnore
 //    @XmlTransient
     public Map<String, String> getSqlMap() {
-        if (sqlMap == null){
+        if (sqlMap == null) {
             sqlMap = new HashMap<String, String>();
         }
         return sqlMap;
@@ -116,6 +116,7 @@ public abstract class BaseEntity<T> implements Serializable {
     /**
      * 是否是新记录（默认：false），调用setIsNewRecord()设置新记录，使用自定义ID。
      * 设置为true后强制执行插入语句，ID不会自动生成，需从手动传入。
+     *
      * @return
      */
     public boolean getIsNewRecord() {
@@ -167,13 +168,20 @@ public abstract class BaseEntity<T> implements Serializable {
             return false;
         }
         BaseEntity<?> that = (BaseEntity<?>) obj;
-        return null == this.getId() ? false : this.getId().equals(that.getId());
+        return null != this.getId() && this.getId().equals(that.getId());
     }
-//
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    //
 //    @Override
 //    public String toString() {
 //        return ReflectionToStringBuilder.toString(this);
 //    }
+
 
     /**
      * 删除标记（0：正常；1：删除；2：审核；）

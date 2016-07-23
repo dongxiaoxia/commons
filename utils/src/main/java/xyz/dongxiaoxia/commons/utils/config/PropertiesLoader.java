@@ -2,6 +2,7 @@ package xyz.dongxiaoxia.commons.utils.config;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.NoSuchElementException;
 import java.util.Properties;
@@ -21,6 +22,10 @@ public class PropertiesLoader {
 
     public PropertiesLoader(String... resourcesPaths) {
         properties = loadProperties(resourcesPaths);
+    }
+
+    public PropertiesLoader(InputStream inputStream){
+        properties = loadProperties(inputStream);
     }
 
     public Properties getProperties() {
@@ -174,6 +179,26 @@ public class PropertiesLoader {
                     logger.info(e.getMessage());
                 }
             }
+        }
+        return pros;
+    }
+
+    private Properties loadProperties(InputStream inputStream) {
+        Properties pros = new Properties();
+            InputStreamReader inputStreamReader = null;
+            try {
+                inputStreamReader = new InputStreamReader(inputStream,"UTF-8");
+                pros.load(inputStreamReader);
+            } catch (Exception e) {
+                logger.info(e.getMessage());
+            } finally {
+                try {
+                    if (inputStreamReader!=null){
+                        inputStreamReader.close();
+                    }
+                } catch (IOException e) {
+                    logger.info(e.getMessage());
+                }
         }
         return pros;
     }

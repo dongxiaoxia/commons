@@ -1,12 +1,14 @@
 package xyz.dongxiaoxia.commons.persistence.uya.jdbc.dbconnectionpool;
 
 /**
+ * 数据库配置
+ *
  * @author dongxiaoxia
  * @create 2016-07-11 16:00
  */
 public class DBConfig {
-    private String driversClass;
-    private String connectionUrl;
+    private String driver;
+    private String url;
     private String username;
     private String password;
     private int maxPoolSize;
@@ -15,20 +17,20 @@ public class DBConfig {
     private long timeout;
     private Boolean autoShrink;
 
-    public String getDriversClass() {
-        return driversClass;
+    public String getDriver() {
+        return driver;
     }
 
-    public void setDriversClass(String driversClass) {
-        this.driversClass = driversClass;
+    public void setDriver(String driver) {
+        this.driver = driver;
     }
 
-    public String getConnectionUrl() {
-        return connectionUrl;
+    public String getUrl() {
+        return url;
     }
 
-    public void setConnectionUrl(String connectionUrl) {
-        this.connectionUrl = connectionUrl;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getUsername() {
@@ -86,4 +88,5 @@ public class DBConfig {
     public void setAutoShrink(Boolean autoShrink) {
         this.autoShrink = autoShrink;
     }
+
 }

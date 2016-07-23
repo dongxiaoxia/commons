@@ -180,7 +180,7 @@ public class ClusterDataSource extends AbstractDataSource {
      * 2011-05-24 数据库对主库降压
      */
     @Override
-    public Connection GetReadConnection() throws SQLException {
+    public Connection getReadConnection() throws SQLException {
 
         return getReadDataSource().getConnection();
     }

@@ -27,8 +27,8 @@ public class Reflections {
      */
     public static Object invokeGetter(Object obj, String propertyName) {
         Object object = obj;
-        for (String name : propertyName.split(".")) {
-            String getterMethodName = GETTER_PREFIX + name.substring(0).toUpperCase() + name.substring(1, name.length());
+        for (String name : propertyName.split("\\.")) {
+            String getterMethodName = GETTER_PREFIX + name.substring(0,1).toUpperCase() + name.substring(1);
             object = invokeMethod(object, getterMethodName, new Class[]{}, new Object[]{});
         }
         return object;
@@ -44,13 +44,13 @@ public class Reflections {
      */
     public static void invokeSetter(Object obj, String propertyName, Object value) {
         Object object = obj;
-        String[] names = propertyName.split(".");
+        String[] names = propertyName.split("\\.");
         for (int i = 0; i < names.length; i++) {
             if (i < names.length - 1) {
-                String getterMethodName = GETTER_PREFIX + names[i].substring(0).toUpperCase() + names[i].substring(1, names[i].length());
+                String getterMethodName = GETTER_PREFIX + names[i].substring(0,1).toUpperCase() + names[i].substring(1);
                 object = invokeMethod(object, getterMethodName, new Class[]{}, new Object[]{});
             } else {
-                String setterMethodName = SETTER_PREFIX + names[i].substring(0).toUpperCase() + names[i].substring(1, names[i].length());
+                String setterMethodName = SETTER_PREFIX + names[i].substring(0,1).toUpperCase() + names[i].substring(1);
                 invokeMethodByName(object, setterMethodName, new Object[]{value});
             }
         }
@@ -296,7 +296,7 @@ public class Reflections {
     }
 
     /**
-     * 将反射时的checked exception转换为unchecked exception.
+     * 将反射时的checked exception转换为unchecked exceptions.
      */
     public static RuntimeException convertReflectionExceptionToUnchecked(Exception e) {
         if (e instanceof IllegalAccessException || e instanceof IllegalArgumentException

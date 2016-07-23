@@ -3,6 +3,7 @@ package xyz.dongxiaoxia.commons.persistence.uya.jdbc.basedao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.dbhelper.DBHelper;
+import xyz.dongxiaoxia.commons.persistence.uya.jdbc.exceptions.DataAccessException;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.statementcreater.IStatementCreater;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.util.Common;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.util.JdbcUtil;
@@ -12,7 +13,6 @@ import xyz.dongxiaoxia.commons.persistence.uya.jdbc.util.SqlInjectHelper;
 import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -28,11 +28,11 @@ public class DAOHandler extends DAOBase {
     }
 
     @Override
-    public Object insert(Object bean) throws Exception{
+    public Object insert(Object bean) {
         return insert(bean, insertUpdateTimeOut);
     }
 
-    public Object[] insert(String sql, Object... param) throws Exception {
+    public Object[] insert(String sql, Object... param) {
         Connection conn = null;
         PreparedStatement ps = null;
         try {
@@ -40,145 +40,142 @@ public class DAOHandler extends DAOBase {
             ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.addBatch(sql);
             ps.setQueryTimeout(insertUpdateTimeOut);
-            if(param != null) {
-                for(int i=0; i<param.length; i++) {
+            if (param != null) {
+                for (int i = 0; i < param.length; i++) {
                     Common.setPara(ps, param[i], i + 1);
                 }
             }
             long startTime = System.currentTimeMillis();
             ps.executeUpdate();
             printlnSqlAndTime(sql, startTime);
-            List<Object> idList = new ArrayList<Object>();
+            List<Object> idList = new ArrayList<>();
             ResultSet rs = ps.getGeneratedKeys();
             while (rs.next()) {
                 idList.add(rs.getObject(1));
             }
             return idList.toArray(new Object[0]);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             log.error("getListByCustom error sql:" + sql, e);
-            throw e;
-        }
-        finally{
+            throw new DataAccessException(e);
+        } finally {
             JdbcUtil.closeStatement(ps);
             connHelper.release(conn);
         }
     }
 
     @Override
-    public void upateEntity(Object bean) throws Exception {
-        upateEntity(bean, queryTimeOut);
+    public void updateEntity(Object bean) {
+        updateEntity(bean, queryTimeOut);
     }
 
     @Override
-    public <I> void upateByID(Class<?> clazz, String updateStatement, I id) throws Exception {
-        upateByID(clazz, updateStatement, id, insertUpdateTimeOut);
+    public <I> void updateByID(Class<?> clazz, String updateStatement, I id) {
+        updateByID(clazz, updateStatement, id, insertUpdateTimeOut);
     }
 
     @Override
-    public void updateByCustom(Class<?> clazz, String updateStatement, String condition) throws Exception {
+    public void updateByCustom(Class<?> clazz, String updateStatement, String condition) {
         updateByCustom(clazz, updateStatement, condition, insertUpdateTimeOut);
     }
 
     @Override
-    public <I> void deleteByID(Class<?> clazz, I id) throws Exception {
+    public <I> void deleteByID(Class<?> clazz, I id) {
         deleteByID(clazz, id, queryTimeOut);
     }
 
     @Override
-    public <I> void deleteByIDS(Class<?> clazz, I[] ids) throws Exception {
+    public <I> void deleteByIDS(Class<?> clazz, I[] ids) {
         deleteByIDS(clazz, ids, queryTimeOut);
     }
 
     @Override
-    public void deleteByCustom(Class<?> clazz, String condition) throws Exception {
+    public void deleteByCustom(Class<?> clazz, String condition) {
         deleteByCustom(clazz, condition, queryTimeOut);
     }
 
     @Override
-    public <I> Object get(Class<?> clazz, I id) throws Exception {
+    public <I> Object get(Class<?> clazz, I id) {
         return get(clazz, id, queryTimeOut);
     }
 
     @Override
-    public Object getByCustom(Class<?> clazz, String columns, String condition,String orderBy) throws Exception{
-        return get(clazz,columns,condition,orderBy,queryTimeOut);
+    public Object getByCustom(Class<?> clazz, String columns, String condition, String orderBy) {
+        return get(clazz, columns, condition, orderBy, queryTimeOut);
     }
 
     @Override
-    public List<?> getListByCustom(Class<?> clazz, String columns, String condition,String orderBy) throws Exception {
+    public List<?> getListByCustom(Class<?> clazz, String columns, String condition, String orderBy) {
         return getListByCustom(clazz, columns, condition, orderBy, queryTimeOut);
     }
 
     @Override
-    public List<?> getListByPage(Class<?> clazz, String condition, String columns, int page, int pageSize, String orderBy) throws Exception {
+    public List<?> getListByPage(Class<?> clazz, String condition, String columns, int page, int pageSize, String orderBy) {
         return getListByPage(clazz, condition, columns, page, pageSize, orderBy, queryTimeOut);
     }
 
     @Override
-    public List<Object[]> customSql(String sql, int columnCount) throws Exception {
+    public List<Object[]> customSql(String sql, int columnCount) {
         return customSql(sql, columnCount, queryTimeOut);
     }
 
     @Override
-    public void customSqlNoReturn(String sql) throws Exception {
+    public void customSqlNoReturn(String sql) {
         customSqlNoReturn(sql, queryTimeOut);
     }
 
     @Override
-    public int getCount(Class<?> clazz, String condition) throws Exception {
+    public int getCount(Class<?> clazz, String condition) {
         return getCount(clazz, condition, queryTimeOut);
     }
 
     @Override
-    public <T,I> List<T> getListByIDS(Class<T> clazz, I[] ids) throws Exception {
+    public <T, I> List<T> getListByIDS(Class<T> clazz, I[] ids) {
         return getListByIDS(clazz, ids, queryTimeOut);
     }
 
     @Override
-    public void updateByCustom(Class<?> clazz, Map<String, Object> kv, Map<String, Object> condition) throws Exception {
+    public void updateByCustom(Class<?> clazz, Map<String, Object> kv, Map<String, Object> condition) {
         updateByCustom(clazz, kv, condition, insertUpdateTimeOut);
     }
 
     @Override
-    public void deleteByCustom(Class<?> clazz, Map<String, Object> condition) throws Exception {
+    public void deleteByCustom(Class<?> clazz, Map<String, Object> condition) {
         deleteByCustom(clazz, condition, queryTimeOut);
     }
 
     @Override
-    public <T> List<T> getListByCustom(Class<T> clazz, String columns, Map<String, Object> condition, String orderBy) throws Exception {
+    public <T> List<T> getListByCustom(Class<T> clazz, String columns, Map<String, Object> condition, String orderBy) {
         return getListByCustom(clazz, columns, condition, orderBy, queryTimeOut);
     }
 
     @Override
-    public <T> List<T> getListByPage(Class<T> clazz, Map<String, Object> condition, String columns, int page, int pageSize, String orderBy) throws Exception {
+    public <T> List<T> getListByPage(Class<T> clazz, Map<String, Object> condition, String columns, int page, int pageSize, String orderBy) {
         return getListByPage(clazz, condition, columns, page, pageSize, orderBy, queryTimeOut);
     }
 
     @Override
-    public int getCount(Class<?> clazz, Map<String, Object> condition) throws Exception {
+    public int getCount(Class<?> clazz, Map<String, Object> condition) {
         return getCount(clazz, condition, queryTimeOut);
     }
 
 
     @Override
-    public <T> List<T> getListBySQL(Class<T> clazz, String sql, Object... param) throws Exception {
+    public <T> List<T> getListBySQL(Class<T> clazz, String sql, Object... param) {
         return getListBySQL(clazz, sql, queryTimeOut, param);
     }
 
     @Override
-    public int execBySQL(String sql, Object... param) throws Exception {
+    public int execBySQL(String sql, Object... param) {
         return execBySQL(sql, insertUpdateTimeOut, param);
     }
 
     @Override
-    public int getCountBySQL(String sql, Object... param) throws Exception {
+    public int getCountBySQL(String sql, Object... param) {
         return getCountBySQL(sql, queryTimeOut, param);
     }
 
-    //----------------------------------------------------------------------
-
     @Override
-    public int getCountBySQL(String sql, int timeOut, Object... param) throws Exception {
+    public int getCountBySQL(String sql, int timeOut, Object... param) {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -187,20 +184,21 @@ public class DAOHandler extends DAOBase {
             ps = conn.prepareStatement(sql);
             ps.setQueryTimeout(timeOut);
 
-            if(param != null) {
-                for(int i=0; i<param.length; i++) {
+            if (param != null) {
+                for (int i = 0; i < param.length; i++) {
                     Common.setPara(ps, param[i], i + 1);
                 }
             }
             long startTime = System.currentTimeMillis();
             rs = ps.executeQuery();
             printlnSqlAndTime(sql, startTime);
-            if(rs.next()) {
+            if (rs.next()) {
                 return rs.getInt(1);
             }
             return 0;
-        } catch(Exception ex) {
-            throw ex;
+        } catch (Exception e) {
+            log.error("getCountBySQL error sql:" + sql, e);
+            throw new DataAccessException(e);
         } finally {
             JdbcUtil.closeResultSet(rs);
             JdbcUtil.closeStatement(ps);
@@ -209,7 +207,7 @@ public class DAOHandler extends DAOBase {
     }
 
     @Override
-    public <T> List<T> getListBySQL(Class<T> clazz, String sql, int timeOut, Object... param) throws Exception {
+    public <T> List<T> getListBySQL(Class<T> clazz, String sql, int timeOut, Object... param) {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement ps = null;
@@ -219,8 +217,8 @@ public class DAOHandler extends DAOBase {
             ps = conn.prepareStatement(sql);
             ps.setQueryTimeout(timeOut);
 
-            if(param != null) {
-                for(int i=0; i<param.length; i++) {
+            if (param != null) {
+                for (int i = 0; i < param.length; i++) {
                     Common.setPara(ps, param[i], i + 1);
                 }
             }
@@ -228,11 +226,10 @@ public class DAOHandler extends DAOBase {
             rs = ps.executeQuery();
             printlnSqlAndTime(sql, startTime);
             dataList = populateData(rs, clazz);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             log.error("getListByCustom error sql:" + sql, e);
-            throw e;
-        }
-        finally{
+            throw new DataAccessException(e);
+        } finally {
             JdbcUtil.closeResultSet(rs);
             JdbcUtil.closeStatement(ps);
             connHelper.release(conn);
@@ -241,11 +238,12 @@ public class DAOHandler extends DAOBase {
     }
 
     @Override
-    public List<Object> getListBySQL(Class<?>[] classes, String sql, Object... param) throws Exception {
+    public List<Object> getListBySQL(Class<?>[] classes, String sql, Object... param) {
         return getListBySQL(classes, sql, queryTimeOut, param);
     }
+
     @Override
-    public List<Object> getListBySQL(Class<?>[] classes, String sql, int timeOut, Object... param) throws Exception {
+    public List<Object> getListBySQL(Class<?>[] classes, String sql, int timeOut, Object... param) {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement ps = null;
@@ -255,8 +253,8 @@ public class DAOHandler extends DAOBase {
             ps = conn.prepareStatement(sql);
             ps.setQueryTimeout(timeOut);
 
-            if(param != null) {
-                for(int i=0; i<param.length; i++) {
+            if (param != null) {
+                for (int i = 0; i < param.length; i++) {
                     Common.setPara(ps, param[i], i + 1);
                 }
             }
@@ -264,11 +262,10 @@ public class DAOHandler extends DAOBase {
             rs = ps.executeQuery();
             printlnSqlAndTime(sql, startTime);
             dataList = populateData(rs, classes);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             log.error("getListByCustom error sql:" + sql, e);
-            throw e;
-        }
-        finally{
+            throw new DataAccessException(e);
+        } finally {
             JdbcUtil.closeResultSet(rs);
             JdbcUtil.closeStatement(ps);
             connHelper.release(conn);
@@ -277,18 +274,16 @@ public class DAOHandler extends DAOBase {
     }
 
     @Override
-    public int execBySQL(String sql, int timeOut, Object... param) throws Exception {
+    public int execBySQL(String sql, int timeOut, Object... param) {
         Connection conn = null;
         PreparedStatement ps = null;
         try {
-            //conn = connHelper.getReadConnection();
-            //modify by haoxb 2012-09-27
             conn = connHelper.get();
             ps = conn.prepareStatement(sql);
             ps.setQueryTimeout(timeOut);
 
-            if(param != null) {
-                for(int i=0; i<param.length; i++) {
+            if (param != null) {
+                for (int i = 0; i < param.length; i++) {
                     Common.setPara(ps, param[i], i + 1);
                 }
             }
@@ -296,18 +291,17 @@ public class DAOHandler extends DAOBase {
             int result = ps.executeUpdate();
             printlnSqlAndTime(sql, startTime);
             return result;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             log.error("getListByCustom error sql:" + sql, e);
-            throw e;
-        }
-        finally{
+            throw new DataAccessException(e);
+        } finally {
             JdbcUtil.closeStatement(ps);
             connHelper.release(conn);
         }
     }
 
     @Override
-    public int[] execBatchSql(String sql, List<Object[]> paramList, boolean useTransaction) throws Exception {
+    public int[] execBatchSql(String sql, List<Object[]> paramList, boolean useTransaction) {
         Connection conn = null;
         PreparedStatement ps = null;
         try {
@@ -318,9 +312,7 @@ public class DAOHandler extends DAOBase {
             ps = conn.prepareStatement(sql);
             ps.setQueryTimeout(insertUpdateTimeOut);
 
-            Iterator<Object[]> iter = paramList.iterator();
-            while (iter.hasNext()) {
-                Object[] param= iter.next();
+            for (Object[] param : paramList) {
                 for (int i = 0; i < param.length; i++) {
                     Common.setPara(ps, param[i], i + 1);
                 }
@@ -337,13 +329,22 @@ public class DAOHandler extends DAOBase {
         } catch (Exception e) {
             log.error("execBatchSql error sql:" + sql, e);
             if (useTransaction) {
-                DBHelper.getDbHelper().rollbackTransaction();
+                try {
+                    DBHelper.getDbHelper().rollbackTransaction();
+                } catch (Exception e1) {
+                    log.error("rollbackTransaction error sql:" + sql, e);
+                    throw new DataAccessException(e1);
+                }
             }
-            throw e;
-        } finally{
+            throw new DataAccessException(e);
+        } finally {
             JdbcUtil.closeStatement(ps);
             if (useTransaction) {
-                DBHelper.getDbHelper().endTransaction();
+                try {
+                    DBHelper.getDbHelper().endTransaction();
+                } catch (Exception e) {
+                    log.error("endTransaction error sql:" + sql, e);
+                }
             } else {
                 connHelper.release(conn);
             }
@@ -351,38 +352,35 @@ public class DAOHandler extends DAOBase {
     }
 
     @Override
-    public void updateByCustom(Class<?> clazz, Map<String, Object> kv, Map<String, Object> condition, int timeOut) throws Exception {
+    public void updateByCustom(Class<?> clazz, Map<String, Object> kv, Map<String, Object> condition, int timeOut) {
         throw new UnsupportedOperationException("Not supported");
     }
 
     @Override
-    public void deleteByCustom(Class<?> clazz, Map<String, Object> condition, int timeOut) throws Exception {
+    public void deleteByCustom(Class<?> clazz, Map<String, Object> condition, int timeOut) {
         throw new UnsupportedOperationException("Not supported");
     }
 
     @Override
-    public <T> List<T> getListByCustom(Class<T> clazz, String columns, Map<String, Object> condition,String orderBy, int timeOut) throws Exception {
+    public <T> List<T> getListByCustom(Class<T> clazz, String columns, Map<String, Object> condition, String orderBy, int timeOut) {
         //TODO
         throw new UnsupportedOperationException("Not supported");
     }
 
     @Override
-    public <T> List<T> getListByPage(Class<T> clazz, Map<String, Object> condition, String columns, int page, int pageSize, String orderBy, int timeOut) throws Exception {
+    public <T> List<T> getListByPage(Class<T> clazz, Map<String, Object> condition, String columns, int page, int pageSize, String orderBy, int timeOut) {
         //TODO
         throw new UnsupportedOperationException("Not supported");
     }
 
     @Override
-    public int getCount(Class<?> clazz, Map<String, Object> condition, int timeOut) throws Exception {
+    public int getCount(Class<?> clazz, Map<String, Object> condition, int timeOut) {
         //TODO
         throw new UnsupportedOperationException("Not supported");
     }
 
 
-
-
-
-    public <T,I> List<T> getListByIDS(Class<T> clazz, I[] ids, int timeOut) throws Exception {
+    public <T, I> List<T> getListByIDS(Class<T> clazz, I[] ids, int timeOut) {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement ps = null;
@@ -396,11 +394,10 @@ public class DAOHandler extends DAOBase {
             rs = ps.executeQuery();
             printlnSqlAndTime(sql.getRealSql(), startTime);
             dataList = populateData(rs, clazz);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             log.error("getListByCustom error sql:" + sql.getSql(), e);
-            throw e;
-        }
-        finally{
+            throw new DataAccessException(e);
+        } finally {
             JdbcUtil.closeResultSet(rs);
             JdbcUtil.closeStatement(ps);
             connHelper.release(conn);
@@ -409,7 +406,7 @@ public class DAOHandler extends DAOBase {
     }
 
 
-    public Object insert(Object bean, int timeOut) throws Exception {
+    public Object insert(Object bean, int timeOut) {
         Class<?> beanCls = bean.getClass();
 
         Connection conn = null;
@@ -426,31 +423,31 @@ public class DAOHandler extends DAOBase {
             printlnSqlAndTime(sql.getRealSql(), startTime);
             boolean isProc = false;
             Class<?>[] clsAry = ps.getClass().getInterfaces();
-            for(Class<?> cls : clsAry) {
-                if(cls == CallableStatement.class) {
+            for (Class<?> cls : clsAry) {
+                if (cls == CallableStatement.class) {
                     isProc = true;
                     break;
                 }
             }
 
             List<java.lang.reflect.Field> identityFields = Common.getIdentityFields(beanCls);
-            if(isProc) {
-                if(identityFields.size() == 1) {
-                    rst = ((CallableStatement)ps).getObject(Common.getDBCloumnName(beanCls, identityFields.get(0)));
+            if (isProc) {
+                if (identityFields.size() == 1) {
+                    rst = ((CallableStatement) ps).getObject(Common.getDBCloumnName(beanCls, identityFields.get(0)));
                 }
             } else {
-                if(identityFields.size() == 1 ) {
+                if (identityFields.size() == 1) {
                     rs = ps.getGeneratedKeys();
                     if (rs.next()) {
                         List<Field> idFieldList = Common.getIdFields(beanCls);
-                        if(idFieldList.size() == 1) {
-                            if(idFieldList.get(0).getType() == int.class
+                        if (idFieldList.size() == 1) {
+                            if (idFieldList.get(0).getType() == int.class
                                     || idFieldList.get(0).getType() == Integer.class) {
                                 rst = rs.getInt(1);
-                            } else if(idFieldList.get(0).getType() == long.class
+                            } else if (idFieldList.get(0).getType() == long.class
                                     || idFieldList.get(0).getType() == Long.class) {
                                 rst = rs.getLong(1);
-                            } else if(idFieldList.get(0).getType() == String.class) {
+                            } else if (idFieldList.get(0).getType() == String.class) {
                                 rst = rs.getString(1);
                             } else {
                                 rst = rs.getObject(1);
@@ -459,9 +456,9 @@ public class DAOHandler extends DAOBase {
                             rst = rs.getObject(1);
                         }
                     }
-                } else if(identityFields.size() == 0) {
+                } else if (identityFields.size() == 0) {
                     List<java.lang.reflect.Field> idFields = Common.getIdFields(beanCls);
-                    if(idFields.size() == 1) {
+                    if (idFields.size() == 1) {
                         Field id = idFields.get(0);
                         id.setAccessible(true);
                         rst = id.get(bean);
@@ -470,39 +467,36 @@ public class DAOHandler extends DAOBase {
             }
         } catch (Exception e) {
             log.error("insert error sql:" + sql.getSql(), e);
-            throw e;
-        }
-        finally{
+            throw new DataAccessException(e);
+        } finally {
             JdbcUtil.closeResultSet(rs);
             JdbcUtil.closeStatement(ps);
             connHelper.release(conn);
         }
-
         return rst;
     }
 
-    public void upateEntity(Object bean, int timeOut) throws Exception {
+    public void updateEntity(Object entity, int timeOut) {
         Connection conn = null;
         PreparedStatement ps = null;
         OutSQL sql = new OutSQL();
         try {
             conn = connHelper.get();
-            ps = psCreater.createUpdateEntity(bean, conn, sql);
+            ps = psCreater.createUpdateEntity(entity, conn, sql);
             ps.setQueryTimeout(timeOut);
             long startTime = System.currentTimeMillis();
             ps.executeUpdate();
             printlnSqlAndTime(sql.getRealSql(), startTime);
         } catch (Exception e) {
             log.error("update error sql:" + sql.getSql(), e);
-            throw e;
-        }
-        finally{
+            throw new DataAccessException(e);
+        } finally {
             JdbcUtil.closeStatement(ps);
             connHelper.release(conn);
         }
     }
 
-    public <I> void upateByID(Class<?> clazz, String updateStatement, I id, int timeOut) throws Exception {
+    public <I> void updateByID(Class<?> clazz, String updateStatement, I id, int timeOut) {
         Connection conn = null;
         PreparedStatement ps = null;
         OutSQL sql = new OutSQL();
@@ -515,15 +509,14 @@ public class DAOHandler extends DAOBase {
             printlnSqlAndTime(sql.getRealSql(), startTime);
         } catch (Exception e) {
             log.error("update error sql:" + sql.getSql(), e);
-            throw e;
-        }
-        finally{
+            throw new DataAccessException(e);
+        } finally {
             JdbcUtil.closeStatement(ps);
             connHelper.release(conn);
         }
     }
 
-    public void updateByCustom(Class<?> clazz, String updateStatement, String condition, int timeOut) throws Exception {
+    public void updateByCustom(Class<?> clazz, String updateStatement, String condition, int timeOut) {
         condition = SqlInjectHelper.simpleFilterSql(condition);
         updateStatement = SqlInjectHelper.simpleFilterSql(updateStatement);
 
@@ -539,15 +532,14 @@ public class DAOHandler extends DAOBase {
             printlnSqlAndTime(sql.getRealSql(), startTime);
         } catch (Exception e) {
             log.error("update error sql:" + sql.getSql(), e);
-            throw e;
-        }
-        finally{
+            throw new DataAccessException(e);
+        } finally {
             JdbcUtil.closeStatement(ps);
             connHelper.release(conn);
         }
     }
 
-    public <I> void deleteByID(Class<?> clazz, I id, int timeOut) throws Exception {
+    public <I> void deleteByID(Class<?> clazz, I id, int timeOut) {
         Connection conn = null;
         PreparedStatement ps = null;
         OutSQL sql = new OutSQL();
@@ -560,15 +552,14 @@ public class DAOHandler extends DAOBase {
             printlnSqlAndTime(sql.getRealSql(), startTime);
         } catch (Exception e) {
             log.error("delete error sql:" + sql.getSql(), e);
-            throw e;
-        }
-        finally{
+            throw new DataAccessException(e);
+        } finally {
             JdbcUtil.closeStatement(ps);
             connHelper.release(conn);
         }
     }
 
-    public <I> void deleteByIDS(Class<?> clazz, I[] ids, int timeOut) throws Exception {
+    public <I> void deleteByIDS(Class<?> clazz, I[] ids, int timeOut) {
         Connection conn = null;
         PreparedStatement ps = null;
         OutSQL sql = new OutSQL();
@@ -581,15 +572,14 @@ public class DAOHandler extends DAOBase {
             printlnSqlAndTime(sql.getRealSql(), startTime);
         } catch (Exception e) {
             log.error("delete error sql:" + sql.getSql(), e);
-            throw e;
-        }
-        finally{
+            throw new DataAccessException(e);
+        } finally {
             JdbcUtil.closeStatement(ps);
             connHelper.release(conn);
         }
     }
 
-    public void deleteByCustom(Class<?> clazz, String condition, int timeOut) throws Exception {
+    public void deleteByCustom(Class<?> clazz, String condition, int timeOut) {
         condition = SqlInjectHelper.simpleFilterSql(condition);
 
         Connection conn = null;
@@ -604,25 +594,21 @@ public class DAOHandler extends DAOBase {
             printlnSqlAndTime(sql.getRealSql(), startTime);
         } catch (Exception e) {
             log.error("delete error sql:" + sql.getSql(), e);
-            throw e;
-        }
-        finally{
+            throw new DataAccessException(e);
+        } finally {
             JdbcUtil.closeStatement(ps);
             connHelper.release(conn);
         }
     }
 
-    public <I> Object get(Class<?> clazz, I id, int timeOut) throws Exception {
+    public <I> Object get(Class<?> clazz, I id, int timeOut) {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement ps = null;
         List<?> dataList = null;
         OutSQL sql = new OutSQL();
         try {
-            // 2011-05-24 使用只读连接
-//			conn = connHelper.get();
             conn = connHelper.getReadConnection();
-
             ps = psCreater.createGetEntity(clazz, conn, id, sql);
             ps.setQueryTimeout(timeOut);
             long startTime = System.currentTimeMillis();
@@ -631,14 +617,12 @@ public class DAOHandler extends DAOBase {
             dataList = populateData(rs, clazz);
         } catch (Exception e) {
             log.error("get error sql:" + sql.getSql(), e);
-            throw e;
-        }
-        finally{
+            throw new DataAccessException(e);
+        } finally {
             JdbcUtil.closeResultSet(rs);
             JdbcUtil.closeStatement(ps);
             connHelper.release(conn);
         }
-
         if (dataList != null && dataList.size() > 0) {
             return dataList.get(0);
         } else {
@@ -646,19 +630,15 @@ public class DAOHandler extends DAOBase {
         }
     }
 
-
-    public Object get(Class<?> clazz, String columns, String condition,String orderBy, int timeOut) throws Exception {
+    public Object get(Class<?> clazz, String columns, String condition, String orderBy, int timeOut) {
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement ps = null;
         List<?> dataList = null;
         OutSQL sql = new OutSQL();
         try {
-            // 2011-05-24 使用只读连接
-//			conn = connHelper.get();
             conn = connHelper.getReadConnection();
-
-            ps = psCreater.createGetByCustom(clazz, conn, columns,condition,orderBy, sql);
+            ps = psCreater.createGetByCustom(clazz, conn, columns, condition, orderBy, sql);
             ps.setQueryTimeout(timeOut);
             long startTime = System.currentTimeMillis();
             rs = ps.executeQuery();
@@ -666,14 +646,12 @@ public class DAOHandler extends DAOBase {
             dataList = populateData(rs, clazz);
         } catch (Exception e) {
             log.error("get error sql:" + sql.getSql(), e);
-            throw e;
-        }
-        finally{
+            throw new DataAccessException(e);
+        } finally {
             JdbcUtil.closeResultSet(rs);
             JdbcUtil.closeStatement(ps);
             connHelper.release(conn);
         }
-
         if (dataList != null && dataList.size() > 0) {
             return dataList.get(0);
         } else {
@@ -681,32 +659,27 @@ public class DAOHandler extends DAOBase {
         }
     }
 
-    public List<?> getListByCustom(Class<?> clazz, String columns, String condition, String orderBy, int timeOut) throws Exception {
+    public List<?> getListByCustom(Class<?> clazz, String columns, String condition, String orderBy, int timeOut) {
         columns = SqlInjectHelper.simpleFilterSql(columns);
         condition = SqlInjectHelper.simpleFilterSql(condition);
         orderBy = SqlInjectHelper.simpleFilterSql(orderBy);
-
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement ps = null;
         List<?> dataList = null;
         OutSQL sql = new OutSQL();
         try {
-            // 2011-05-24 使用只读连接
-//			conn = connHelper.get();
             conn = connHelper.getReadConnection();
-
             ps = psCreater.createGetByCustom(clazz, conn, columns, condition, orderBy, sql);
             ps.setQueryTimeout(timeOut);
             long startTime = System.currentTimeMillis();
             rs = ps.executeQuery();
             printlnSqlAndTime(sql.getRealSql(), startTime);
             dataList = populateData(rs, clazz);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             log.error("getListByCustom error sql:" + sql.getSql(), e);
-            throw e;
-        }
-        finally{
+            throw new DataAccessException(e);
+        } finally {
             JdbcUtil.closeResultSet(rs);
             JdbcUtil.closeStatement(ps);
             connHelper.release(conn);
@@ -720,23 +693,17 @@ public class DAOHandler extends DAOBase {
                                  int page,
                                  int pageSize,
                                  String orderBy,
-                                 int timeOut)
-            throws Exception {
-
+                                 int timeOut) {
         columns = SqlInjectHelper.simpleFilterSql(columns);
         condition = SqlInjectHelper.simpleFilterSql(condition);
         orderBy = SqlInjectHelper.simpleFilterSql(orderBy);
-
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement ps = null;
         List<?> dataList = null;
         OutSQL sql = new OutSQL();
         try {
-            // 2011-05-24 使用只读连接
-//			conn = connHelper.get();
             conn = connHelper.getReadConnection();
-
             ps = psCreater.createGetByPage(clazz, conn, condition, columns, page, pageSize, orderBy, sql);
             ps.setQueryTimeout(timeOut);
             long startTime = System.currentTimeMillis();
@@ -745,9 +712,8 @@ public class DAOHandler extends DAOBase {
             dataList = populateData(rs, clazz);
         } catch (Exception e) {
             log.error("getListByPage error sql:" + sql.getSql(), e);
-            throw e;
-        }
-        finally{
+            throw new DataAccessException(e);
+        } finally {
             JdbcUtil.closeResultSet(rs);
             JdbcUtil.closeStatement(ps);
             connHelper.release(conn);
@@ -757,32 +723,27 @@ public class DAOHandler extends DAOBase {
 
     public int getCount(Class<?> clazz,
                         String condition,
-                        int timeOut) throws Exception{
+                        int timeOut) {
         condition = SqlInjectHelper.simpleFilterSql(condition);
-
         int count = 0;
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement ps = null;
         OutSQL sql = new OutSQL();
         try {
-            // 2011-05-24 使用只读连接
-//			conn = connHelper.get();
             conn = connHelper.getReadConnection();
-
             ps = psCreater.createGetCount(clazz, conn, condition, sql);
             ps.setQueryTimeout(timeOut);
             long startTime = System.currentTimeMillis();
             rs = ps.executeQuery();
             printlnSqlAndTime(sql.getRealSql(), startTime);
-            if(rs.next()){
+            if (rs.next()) {
                 count = rs.getInt(1);
             }
         } catch (Exception e) {
             log.error("getCount error sql:" + sql.getSql(), e);
-            throw e;
-        }
-        finally{
+            throw new DataAccessException(e);
+        } finally {
             JdbcUtil.closeResultSet(rs);
             JdbcUtil.closeStatement(ps);
             connHelper.release(conn);
@@ -792,8 +753,8 @@ public class DAOHandler extends DAOBase {
 
     public List<Object[]> customSql(String sql,
                                     int columnCount,
-                                    int timeOut) throws Exception {
-        List<Object[]> list = new ArrayList<Object[]>();
+                                    int timeOut) {
+        List<Object[]> list = new ArrayList<>();
         Connection conn = null;
         ResultSet rs = null;
         Statement stmt = null;
@@ -806,16 +767,15 @@ public class DAOHandler extends DAOBase {
             printlnSqlAndTime(sql, startTime);
             while (rs.next()) {
                 Object[] objAry = new Object[columnCount];
-                for(int i=0; i<columnCount; i++){
-                    objAry[i] = rs.getObject(i+1);
+                for (int i = 0; i < columnCount; i++) {
+                    objAry[i] = rs.getObject(i + 1);
                 }
                 list.add(objAry);
             }
         } catch (Exception e) {
             log.error("sql:" + sql, e);
-            throw e;
-        }
-        finally{
+            throw new DataAccessException(e);
+        } finally {
             JdbcUtil.closeResultSet(rs);
             JdbcUtil.closeStatement(stmt);
             connHelper.release(conn);
@@ -823,7 +783,7 @@ public class DAOHandler extends DAOBase {
         return list;
     }
 
-    public void customSqlNoReturn(String sql, int timeOut) throws Exception {
+    public void customSqlNoReturn(String sql, int timeOut) {
         Connection conn = null;
         Statement stmt = null;
         try {
@@ -835,27 +795,25 @@ public class DAOHandler extends DAOBase {
             printlnSqlAndTime(sql, startTime);
         } catch (Exception e) {
             log.error("sql:" + sql, e);
-            throw e;
-        }
-        finally{
+            throw new DataAccessException(e);
+        } finally {
             JdbcUtil.closeStatement(stmt);
             connHelper.release(conn);
         }
     }
 
-
     @Override
-    public <T> T getSingleRecord(Class<T> clazz, String sql, Object... param) throws Exception {
+    public <T> T getSingleRecord(Class<T> clazz, String sql, Object... param) {
         return getSingleRecord(clazz, sql, queryTimeOut, param);
     }
 
-
     @Override
-    public <T> T getSingleRecord(Class<T> clazz, String sql, int timeOut, Object... param) throws Exception {
+    public <T> T getSingleRecord(Class<T> clazz, String sql, int timeOut, Object... param) {
         List<T> list = getListBySQL(clazz, sql, param);
-        if(list==null||list.isEmpty())
+        if (list == null || list.isEmpty())
             return null;
-        if(list.size()>1)
-            throw new SQLException("There are More than one Record in this ResultSet");
-        return list.get(0);	}
+        if (list.size() > 1)
+            throw new DataAccessException("There are More than one Record in this ResultSet");
+        return list.get(0);
+    }
 }

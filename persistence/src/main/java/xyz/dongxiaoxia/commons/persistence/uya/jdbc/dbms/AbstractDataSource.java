@@ -16,7 +16,7 @@ public abstract class AbstractDataSource implements DataSource {
      * @return
      * @throws SQLException
      */
-    public Connection GetReadConnection() throws SQLException {
+    public Connection getReadConnection() throws SQLException {
         throw new SQLException("Not Implemented");
     }
 

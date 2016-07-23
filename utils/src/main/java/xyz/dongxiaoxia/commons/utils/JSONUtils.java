@@ -35,9 +35,7 @@ import java.util.Map.Entry;
 public class JSONUtils {  
     /** 
      * 格式化日期 
-     */  
-    private static final SimpleDateFormat FMT = new SimpleDateFormat(  
-            "yyyy-MM-dd");  
+     */
     private Map<String, Object> jsonMap = new HashMap<String, Object>();  
   
     /** 
@@ -130,7 +128,8 @@ public class JSONUtils {
             } else if (isNoQuote(value)) {  
                 sb.append(value);  
             } else if (value instanceof Date) {  
-                sb.append("'").append(FMT.format(value)).append("'");  
+                sb.append("'").append(new SimpleDateFormat(
+                        "yyyy-MM-dd").format(value)).append("'");
             } else if (isQuote(value)) {  
                 sb.append("'").append(value).append("'");  
             } else if (value.getClass().isArray()) {  
@@ -169,7 +168,8 @@ public class JSONUtils {
         for (int i = 0; i < len; i++) {  
             v = Array.get(array, i);  
             if (v instanceof Date) {  
-                sb.append("'").append(FMT.format(v)).append("'").append(",");  
+                sb.append("'").append(new SimpleDateFormat(
+                        "yyyy-MM-dd").format(v)).append("'").append(",");
             } else if (isQuote(v)) {  
                 sb.append("'").append(v).append("'").append(",");  
             } else if (isNoQuote(v)) {  

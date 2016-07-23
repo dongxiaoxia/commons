@@ -12,176 +12,180 @@ import java.util.List;
 import java.util.Stack;
 
 /**
+ * 数据库连接池
+ *
  * @author dongxiaoxia
  * @create 2016-07-11 15:15
  */
 public class ConnectionPool {
     private static Logger log = LoggerFactory.getLogger(ConnectionPool.class);
-    private Stack<Connection> AvailableConn = new Stack<Connection>(); //Connections stack
-    private DBConfig _Config ; //Pool's configuration.
-    private List<Connection> Pool = new ArrayList<Connection>(); //Here store all connections.
-    //add by liuzw
-    public ConnectionPool(){
+    private Stack<Connection> availableConn = new Stack<>(); //Connections stack
+    private DBConfig dbConfig; //Pool's configuration.
+    private List<Connection> Pool = new ArrayList<>(); //Here store all connections.
+    private PoolState state = new PoolState();
+
+    public ConnectionPool() {
 
     }
-    public ConnectionPool(DBConfig config)
-    {
-        try
-        {
-            _Config = config;
-            LoadDrivers();
-            Init();
-            RegisterExcetEven();
-        }
-        catch(Exception err)
-        {
-            err.printStackTrace();
+
+    public ConnectionPool(DBConfig config) {
+        try {
+            dbConfig = config;
+            loadDrivers();
+            init();
+            registerExitEven();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
         }
     }
 
-    public int GetAllCount()
-    {
+    /**
+     * 获取所有的连接数量
+     *
+     * @return 所有的连接数量
+     */
+    public int getAllCount() {
         return Pool.size();
     }
 
-    public int GetFreeConnCount()
-    {
-        return AvailableConn.size();
+    /**
+     * 获取可用的连接数量
+     *
+     * @return 可用的连接数量
+     */
+    public int getFreeConnCount() {
+        return availableConn.size();
     }
 
-    private PoolState state = new PoolState();
-    public synchronized Connection Get() throws Exception
-    {
-        int freeCount = AvailableConn.size();
-        state.setNoWorkCout(freeCount);
-        if(freeCount>0)
-        {
-            Connection conn = AvailableConn.pop();
-            if(conn==null){
+    /**
+     * 获取数据库连接
+     *
+     * @return 数据库连接
+     * @throws Exception
+     */
+    public synchronized Connection get() throws Exception {
+        int freeCount = getFreeConnCount();
+        state.setNoWorkCount(freeCount);
+        if (freeCount > 0) {
+            Connection conn = availableConn.pop();
+            if (conn != null) {
                 Pool.remove(conn);
             }
-            log.debug("Connection get " + conn + " connection size is " + GetAllCount() + " FreeConnCount is " + GetFreeConnCount());
+            log.debug("Connection get " + conn + " connection size is " + getAllCount() + " FreeConnCount is " + getFreeConnCount());
             return conn;
-        }
-        else if(GetAllCount() < _Config.getMaxPoolSize())
-        {
-            Connection conn = CreateConn();
-            log.debug(" Connection get "+conn+" connection size is "+GetAllCount()+" FreeConnCount is "+GetFreeConnCount());
+        } else if (getAllCount() < dbConfig.getMaxPoolSize()) {
+            Connection conn = createConn();
+            log.debug(" Connection get " + conn + " connection size is " + getAllCount() + " FreeConnCount is " + getFreeConnCount());
             return conn;
-        }
-        else
-        {
+        } else {
             throw new Exception("db connection pool is full");
         }
     }
 
     /**
      * 2011-05-24 获得一个只需要读的数据库连接,处理主库压力大的情况下，降低主库压力
-     * by renjun
+     *
      * @return 一个只供读的数据库连接，可能是主库，也有可能是从库
      * @throws Exception
      */
     public Connection GetReadConnection() throws Exception {
-        return Get();
+        return get(); //TODO 获取只读数据库连接
     }
 
-    public synchronized void Release(Connection conn)
-    {
-        if(conn!=null)
-        {
-            try
-            {
-                if(_Config.getAutoShrink() //is allow auto shrink pool
-                        && state.GetNoWorkCount(_Config.getIdleTimeOut()*1000)>0//check no work connections count
-                        )
-                {
-                    Destroy(conn);
-                    state.setNoWorkCout(GetFreeConnCount());
-
-                }
-                else
-                {
-                    if(!conn.isClosed())
-                    {
-                        AvailableConn.push(conn);
-                    }
-                    else
-                    {
-                        Destroy(conn);
+    /**
+     * 释放数据库连接
+     *
+     * @param conn 连接
+     */
+    public synchronized void release(Connection conn) {
+        if (conn != null) {
+            try {
+                if (dbConfig.getAutoShrink() //is allow auto shrink pool
+                        && state.getNoWorkCount(dbConfig.getIdleTimeOut() * 1000) > 0//check no work connections count
+                        ) {
+                    destroy(conn);
+                    state.setNoWorkCount(getFreeConnCount());
+                } else {
+                    if (!conn.isClosed()) {
+                        availableConn.push(conn);
+                    } else {
+                        destroy(conn);
                     }
                 }
-            }
-            catch (SQLException e)
-            {
-                e.printStackTrace();
+            } catch (SQLException e) {
+                log.error(e.getMessage(), e);
             }
         }
-
-        log.debug("Release method connection size is "+GetAllCount()+" FreeConnCount is "+GetFreeConnCount());
+        log.debug("release method connection size is " + getAllCount() + " FreeConnCount is " + getFreeConnCount());
     }
 
-    //-------------------------------------------------------------------------------------------------------------------------------------//
 
-    private synchronized void Destroy(Connection conn) throws SQLException
-    {
-        if(conn!=null)
-        {
-            try
-            {
-                //System.out.println("close one connection!!!");
+    /**
+     * 销毁数据库连接
+     *
+     * @param conn 连接
+     * @throws SQLException
+     */
+    private synchronized void destroy(Connection conn) throws SQLException {
+        if (conn != null) {
+            try {
                 conn.close();
                 Pool.remove(conn); //remove this connection from pool
-                log.debug(" close one connection!!!"+conn+" connection size is "+GetAllCount()+" FreeConnCount is "+GetFreeConnCount());
-            }
-            finally
-            {
-                conn=null;
+                log.debug(" close one connection!!!" + conn + " connection size is " + getAllCount() + " FreeConnCount is " + getFreeConnCount());
+            } finally {
+                conn = null;
             }
         }
     }
 
-    private synchronized Connection CreateConn() throws Exception
-    {
+    /**
+     * 创建数据库连接
+     *
+     * @return 数据库连接
+     * @throws Exception
+     */
+    private synchronized Connection createConn() throws Exception {
         Connection conn = null;
         try {
-            if (_Config.getUsername() == null) {
-                conn = DriverManager.getConnection(_Config.getConnectionUrl());
+            if (dbConfig.getUsername() == null) {
+                conn = DriverManager.getConnection(dbConfig.getUrl());
             } else {
-                conn = DriverManager.getConnection(_Config.getConnectionUrl(), _Config.getUsername(), _Config.getPassword());
+                conn = DriverManager.getConnection(dbConfig.getUrl(), dbConfig.getUsername(), dbConfig.getPassword());
             }
         } catch (SQLException e) {
-//			return null;
             throw e;
-        }
-        finally
-        {
-            if(conn!=null && !conn.isClosed())
-            {
-                log.debug(" this conn is create "+conn+" connection size is "+GetAllCount()+" FreeConnCount is "+GetFreeConnCount());
+        } finally {
+            if (conn != null && !conn.isClosed()) {
+                log.debug(" this conn is create " + conn + " connection size is " + getAllCount() + " FreeConnCount is " + getFreeConnCount());
                 Pool.add(conn);
             }
         }
         return conn;
     }
 
-    private void LoadDrivers() {
+    /**
+     * 加载JDBC驱动类
+     */
+    private void loadDrivers() {
         try {
-            Driver driver = (Driver) Class.forName(_Config.getDriversClass()).newInstance();
+            Driver driver = (Driver) Class.forName(dbConfig.getDriver()).newInstance();
             DriverManager.registerDriver(driver);
             DriverManager.setLoginTimeout(1);
-
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
-    private void Init() throws Exception
-    {
-        for(int i=0;i<_Config.getMinPoolSize();i++)
-        {
-            Connection conn = CreateConn();
-            if(conn!=null){
-                AvailableConn.push(conn);
+    /**
+     * 初始化数据库连接池
+     *
+     * @throws Exception
+     */
+    private void init() throws Exception {
+        for (int i = 0; i < dbConfig.getMinPoolSize(); i++) {
+            Connection conn = createConn();
+            if (conn != null) {
+                availableConn.push(conn);
             }
         }
     }
@@ -189,49 +193,41 @@ public class ConnectionPool {
     /*
      * when application exiting destroy all connections
      */
-    private void RegisterExcetEven()
-    {
-        Runtime.getRuntime().addShutdownHook(new Thread(){
-            public void run()
-            {
+    private void registerExitEven() {
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
                 System.out.println("application exiting,begin remove all connections.");
-                for(Connection conn : Pool)
-                {
-                    try
-                    {
-                        if(conn!=null && !conn.isClosed())
-                        {
+                for (Connection conn : Pool) {
+                    try {
+                        if (conn != null && !conn.isClosed()) {
                             conn.close();
                         }
-                    }
-                    catch (SQLException e)
-                    {
-                        e.printStackTrace();
+                    } catch (SQLException e) {
+                        log.error(e.getMessage(), e);
                     }
                 }
             }
         });
     }
 
-    //-----------------------------------------------------------------------------------------------------//
 
-    public class PoolState
-    {
+    /**
+     * 数据库连接池状态
+     */
+    public class PoolState {
         private long duration;
         private int noWorkCount = 0;
-        public synchronized void setNoWorkCout(int noWorkCout) {
-            if(this.noWorkCount<=2 && noWorkCout>2)
-            {
+
+        public synchronized void setNoWorkCount(int noWorkCout) {
+            if (this.noWorkCount <= 2 && noWorkCout > 2) {
                 duration = System.currentTimeMillis();
             }
             this.noWorkCount = noWorkCout;
         }
 
-        public synchronized int GetNoWorkCount(long duration)
-        {
-            if((System.currentTimeMillis()-this.duration>duration))
-            {
-                return (noWorkCount-2);
+        public synchronized int getNoWorkCount(long duration) {
+            if ((System.currentTimeMillis() - this.duration > duration)) {
+                return (noWorkCount - 2);
             }
             return 0;
         }

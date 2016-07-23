@@ -201,7 +201,7 @@ public class DbDataSource extends AbstractDataSource {
             DbMonitor monitor = this.getMonitors().get(index);
             monitor.onCheckIn(this, connection);
         }
-        log.debug("Release Connection dataSource url:"+connection.getDataSource().getName()+"  isAlive:"+connection.getDataSource().isAlive());
+        log.debug("release Connection dataSource url:"+connection.getDataSource().getName()+"  isAlive:"+connection.getDataSource().isAlive());
         // // 池关闭或连接有严重错误，摧毁connection
         if (connection.isBroken() || isShutDown ) {
             // hook calls

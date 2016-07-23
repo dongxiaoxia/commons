@@ -10,7 +10,7 @@ public class CacheEntry<K, V> implements Cacheable<K>,Serializable{
 
     private static final long serialVersionUID = -3971709196436977492L;
     private static final long SECOND_TIME = 1000;
-    private final int DEFAULT_VALIDITY_TIME = 60;//默认时间 20秒
+    private static final int DEFAULT_VALIDITY_TIME = 60;//默认时间 20秒
 
     private long expirationTime;
     private K key;

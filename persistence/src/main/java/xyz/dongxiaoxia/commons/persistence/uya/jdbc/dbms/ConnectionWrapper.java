@@ -118,7 +118,7 @@ public class ConnectionWrapper implements Connection  {
 
 
 		//		char firstChar = state.charAt(0);
-		// if it's a communication exception, a mysql deadlock or an implementation-specific error code, flag this connection as being potentially broken.
+		// if it's a communication exceptions, a mysql deadlock or an implementation-specific error code, flag this connection as being potentially broken.
 		// state == 40001 is mysql specific triggered when a deadlock is detected
 		// state == HY000 is firebird specific triggered when a connection is broken
 //		char firstChar = state.charAt(0);
@@ -141,7 +141,7 @@ public class ConnectionWrapper implements Connection  {
 	
 	
 	/**
-	 * Checks if the connection is (logically) closed and throws an exception if it is.
+	 * Checks if the connection is (logically) closed and throws an exceptions if it is.
 	 * 
 	 * @throws SQLException
 	 *             on error
