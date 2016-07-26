@@ -10,6 +10,7 @@ import xyz.dongxiaoxia.commons.utils.config.PropertiesLoader;
 import java.io.File;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * 数据库连接帮助类
@@ -21,7 +22,7 @@ public class ConnectionHelper {
 
     private static final Logger log = LoggerFactory.getLogger(ConnectionHelper.class);
 
-    private ConnectionPool connPool;
+    private ConnectionPool connectionPool;
 
     private final ThreadLocal<Connection> threadLocal = new ThreadLocal<>();
 
@@ -35,15 +36,15 @@ public class ConnectionHelper {
         String swapDataSource = propertiesLoader.getProperty("swapDataSource");
         swapDataSource = swapDataSource.equals("") ? null : swapDataSource;// TODO: 2016/7/12
         if (swapDataSource != null) {
-            connPool = getDataSource(configPath, swapDataSource);
-            if (connPool == null) {
+            connectionPool = getDataSource(configPath, swapDataSource);
+            if (connectionPool == null) {
                 throw new Exception("conn pool is null:" + configPath);
             }
         } else {
-            connPool = createConnPool(propertiesLoader);
+            connectionPool = createConnPool(propertiesLoader);
         }
-        log.info("init ConnectionPool success connection count:" + connPool.getAllCount());
-        if (connPool.getAllCount() == 0) {
+        log.info("init ConnectionPool success connection count:" + connectionPool.getAllCount());
+        if (connectionPool.getAllCount() == 0) {
             log.warn("success create 0 connection,please check config!!!");
         }
     }
@@ -56,8 +57,8 @@ public class ConnectionHelper {
         threadLocal.set(null);
     }
 
-    public ConnectionPool getConnPool() {
-        return connPool;
+    public ConnectionPool getConnectionPool() {
+        return connectionPool;
     }
 
     /**
@@ -66,7 +67,7 @@ public class ConnectionHelper {
      * @param loader
      * @return
      */
-    private ConnectionPool createConnPool(PropertiesLoader loader) {
+    private ConnectionPool createConnPool(PropertiesLoader loader) throws SQLException {
         String url = loader.getProperty("url");
         String driver = loader.getProperty("driver");
         String username = loader.getProperty("username");
@@ -119,7 +120,7 @@ public class ConnectionHelper {
     public Connection get() throws Exception {
         Connection conn = threadLocal.get();
         if (conn == null) {
-            conn = connPool.get();
+            conn = connectionPool.get();
         }
         return conn;
     }
@@ -133,7 +134,7 @@ public class ConnectionHelper {
     public Connection getReadConnection() throws Exception {
         Connection conn = threadLocal.get();
         if (conn == null) {
-            conn = connPool.GetReadConnection();
+            conn = connectionPool.GetReadConnection();
         }
         return conn;
     }
@@ -141,13 +142,13 @@ public class ConnectionHelper {
     /**
      * 释放连接
      *
-     * @param conn
+     * @param conn 数据库连接
      */
     public void release(Connection conn) {
-        Connection tconn = threadLocal.get();
-        if (tconn == null || (tconn != null && (tconn.hashCode() != conn.hashCode()))) {
+        Connection connection = threadLocal.get();
+        if (connection == null || connection.hashCode() != conn.hashCode()) {
+            connectionPool.release(conn);
             log.debug("this conn is release " + conn);
-            connPool.release(conn);
         }
     }
 }

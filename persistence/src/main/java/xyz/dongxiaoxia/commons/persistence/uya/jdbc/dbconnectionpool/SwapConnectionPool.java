@@ -4,6 +4,7 @@ import xyz.dongxiaoxia.commons.persistence.uya.jdbc.dbms.AbstractDataSource;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.util.DbUtil;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * 该ConnectionPool封装SWAP DataSource实现
@@ -28,8 +29,7 @@ public class SwapConnectionPool extends ConnectionPool {
         return -1;
     }
 
-    public synchronized Connection get() throws Exception
-    {
+    public synchronized Connection get() throws SQLException {
         return dataSource.getConnection();
     }
 

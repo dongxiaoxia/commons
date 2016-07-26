@@ -28,14 +28,14 @@ public class ConnectionPool {
 
     }
 
-    public ConnectionPool(DBConfig config) {
+    public ConnectionPool(DBConfig config) throws SQLException {
         try {
             dbConfig = config;
             loadDrivers();
             init();
             registerExitEven();
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            throw new SQLException(e.getMessage(),e);
         }
     }
 
@@ -63,7 +63,7 @@ public class ConnectionPool {
      * @return 数据库连接
      * @throws Exception
      */
-    public synchronized Connection get() throws Exception {
+    public synchronized Connection get() throws SQLException {
         int freeCount = getFreeConnCount();
         state.setNoWorkCount(freeCount);
         if (freeCount > 0) {
@@ -78,7 +78,7 @@ public class ConnectionPool {
             log.debug(" Connection get " + conn + " connection size is " + getAllCount() + " FreeConnCount is " + getFreeConnCount());
             return conn;
         } else {
-            throw new Exception("db connection pool is full");
+            throw new SQLException("Database Connection Pool is full");
         }
     }
 
@@ -144,7 +144,7 @@ public class ConnectionPool {
      * @return 数据库连接
      * @throws Exception
      */
-    private synchronized Connection createConn() throws Exception {
+    private synchronized Connection createConn() throws SQLException {
         Connection conn = null;
         try {
             if (dbConfig.getUsername() == null) {
@@ -152,8 +152,6 @@ public class ConnectionPool {
             } else {
                 conn = DriverManager.getConnection(dbConfig.getUrl(), dbConfig.getUsername(), dbConfig.getPassword());
             }
-        } catch (SQLException e) {
-            throw e;
         } finally {
             if (conn != null && !conn.isClosed()) {
                 log.debug(" this conn is create " + conn + " connection size is " + getAllCount() + " FreeConnCount is " + getFreeConnCount());
@@ -166,13 +164,13 @@ public class ConnectionPool {
     /**
      * 加载JDBC驱动类
      */
-    private void loadDrivers() {
+    private void loadDrivers() throws SQLException {
         try {
             Driver driver = (Driver) Class.forName(dbConfig.getDriver()).newInstance();
             DriverManager.registerDriver(driver);
             DriverManager.setLoginTimeout(1);
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            throw new SQLException(e.getMessage() + " 加载JDBC驱动失败", e);
         }
     }
 

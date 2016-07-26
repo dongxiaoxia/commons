@@ -2,6 +2,7 @@ package xyz.dongxiaoxia.commons.persistence.uya.jdbc.basedao;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import xyz.dongxiaoxia.commons.persistence.uya.jdbc.dbhelper.DBHelper;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.exceptions.DataAccessException;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.statementcreater.IStatementCreater;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.util.DbUtil;
@@ -13,10 +14,13 @@ import java.net.URL;
 import java.sql.*;
 
 /**
- * 辅助类 用来引出 sql 和 proc
+ * 辅助类 用来引出 sql 和 proc，不直接使用DAOHandler,而是使用本类。
+ * 一个程序对应一个DAOHandler,即要求DAOHandler单例,没有特殊情况，使用DBHelper类创建本类对象
+ * 一般来说 sql 和 proc 对象已经满足了常规的需求，为了自定义数据库操作，提供了几个方法供客户端使用。
  *
  * @author dongxiaoxia
  * @create 2016-07-11 14:15
+ * @see DBHelper#getDbHelper()
  */
 public class DAOHelper {
     private static Logger log = LoggerFactory.getLogger(DAOHelper.class);
@@ -30,20 +34,20 @@ public class DAOHelper {
      */
     public IDAO proc = null;
 
-    private ConnectionHelper connHelper;
+    private ConnectionHelper connectionHelper;
 
-    public DAOHelper(ConnectionHelper connHelper) {
-        this.connHelper = connHelper;
+    public DAOHelper(ConnectionHelper connectionHelper) {
+        this.connectionHelper = connectionHelper;
     }
 
-    public DAOHelper(ConnectionHelper connHelper, IDAO sql, IDAO proc) {
-        this.connHelper = connHelper;
+    public DAOHelper(ConnectionHelper connectionHelper, IDAO sql, IDAO proc) {
+        this.connectionHelper = connectionHelper;
         this.sql = sql;
         this.proc = proc;
     }
 
     /**
-     * <b>*.properties格式:</b><br />
+     * * <b>*.properties格式:</b><br />
      * url:jdbc:sqlserver://127.0.0.1:12345;DatabaseName=DBName<br />
      * driver:com.microsoft.sqlserver.jdbc.SQLServerDriver<br />
      * username:un<br />
@@ -53,10 +57,11 @@ public class DAOHelper {
      * idleTimeOut:30<br />
      * SqlCreaterClass:xyz.dongxiaoxia.commons.persistence.uya.jdbc.statementcreater.MysqlPSCreater<br />
      * ProcCreaterClass:xyz.dongxiaoxia.commons.persistence.uya.jdbc.statementcreater.ProcCSCreater<br />
-     * </p>
      *
+     * @param url 配置文件URL对象
      * @return DAO实例
-     * <p>
+     * @throws Exception 创建DAOHelper过程中可能发生的异常
+     * @see xyz.dongxiaoxia.commons.persistence.uya.jdbc.dbconnectionpool.DBConfig
      */
     public static DAOHelper createDAO(URL url) throws Exception {
         String path = url.getPath();
@@ -68,8 +73,6 @@ public class DAOHelper {
         //创建连接池
         ConnectionHelper ch = new ConnectionHelper(url);
         PropertiesLoader propertiesLoader = new PropertiesLoader(url.openStream());
-
-
         //创建一般增删改查的IDAO实例
         AbstractDAOHandler sqlDao = null;
         String sqlCreaterClass = propertiesLoader.getProperty("SqlCreaterClass");
@@ -91,78 +94,95 @@ public class DAOHelper {
         return dao;
     }
 
-    public ConnectionHelper getConnHelper() {
-        return this.connHelper;
+    /**
+     * 获取ConnectionHelper
+     *
+     * @return ConnectionHelper
+     */
+    public ConnectionHelper getConnectionHelper() {
+        return this.connectionHelper;
     }
 
-
-    public Object execInsert(String sql, IPreparedStatementHandler handler) throws Exception {
-        return execWithPara(sql, handler);
-    }
-
-    public Object execWithPara(String sql, IPreparedStatementHandler handler) throws Exception {
+    /**
+     * 执行更改数据库操作
+     *
+     * @param sql     sql语句
+     * @param handler PrepareStatement预处理语句处理对象
+     * @return sql语句执行结果
+     */
+    public Object execInsert(String sql, IPreparedStatementHandler handler) {
         Connection conn = null;
         PreparedStatement ps = null;
         try {
-            conn = connHelper.get();
+            conn = connectionHelper.get();
             ps = conn.prepareStatement(sql);
             return handler.exec(ps);
         } catch (Exception e) {
-            log.error("execQuery error sql:" + sql, e);
-            throw e;
+            throw new DataAccessException(e.getMessage() + "ExecInsert ERROR SQL:" + sql, e);
         } finally {
             DbUtil.closeStatement(ps);
-            connHelper.release(conn);
+            connectionHelper.release(conn);
         }
     }
 
-    public <T> T execQuery(String sql, ResultSetHandler<T> handler) throws Exception {
+    /**
+     * 执行数据库查询操作
+     *
+     * @param sql     sql查询语句
+     * @param handler 数据库结果集处理对象
+     * @param <T>     返回结果类型
+     * @return 查询结果
+     */
+    public <T> T execQuery(String sql, ResultSetHandler<T> handler) {
         Connection conn = null;
         ResultSet rs = null;
-        Statement stmt = null;
+        PreparedStatement stmt = null;
         try {
-            conn = connHelper.getReadConnection();
-            stmt = conn.createStatement();
+            conn = connectionHelper.getReadConnection();
+            stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery(sql);
             return handler.handle(rs);
         } catch (Exception e) {
-            log.error("execQuery error sql:" + sql, e);
-            throw e;
+            throw new DataAccessException(e.getMessage() + "ExecQuery ERROR SQL:" + sql, e);
         } finally {
             DbUtil.closeResultSet(rs);
             DbUtil.closeStatement(stmt);
-            connHelper.release(conn);
+            connectionHelper.release(conn);
         }
     }
 
-    public Object execProc(String sql, ICallableStatementHandler handler) throws Exception {
+    /**
+     * 执行存储过程
+     *
+     * @param sql     存储过程sql语句
+     * @param handler CallableStatement处理对象
+     * @return 存储过程执行返回结果
+     */
+    public Object execProc(String sql, ICallableStatementHandler handler) {
         Connection conn = null;
         CallableStatement cs = null;
         try {
-            conn = connHelper.get();
+            conn = connectionHelper.get();
             cs = conn.prepareCall(sql);
             return handler.exec(cs);
-        } catch (SQLException e) {
-            log.error("execCustomProc error " + sql);
-            throw e;
+        } catch (Exception e) {
+            throw new DataAccessException(e.getMessage() + "ExecCustomProc ERROR SQL: " + sql, e);
         } finally {
             DbUtil.closeStatement(cs);
-            connHelper.release(conn);
+            connectionHelper.release(conn);
         }
     }
-
 
     /**
      * 执行事务任务
      *
-     * @param tran
-     * @throws Exception
+     * @param transaction 事务处理操作对象
      */
-    public void execTransaction(ITransaction tran) {
+    public void execTransaction(ITransaction transaction) {
         // 事务开始
         beginTransaction();
         try {
-            tran.exec();
+            transaction.exec();
             //事务提交
             commitTransaction();
         } catch (Exception e) {
@@ -177,8 +197,6 @@ public class DAOHelper {
 
     /**
      * 开启事务(默认级别TRANSACTION_READ_COMMITTED)
-     *
-     * @throws Exception
      */
     public void beginTransaction() {
         beginTransaction(Connection.TRANSACTION_READ_COMMITTED);
@@ -188,12 +206,11 @@ public class DAOHelper {
      * 开启事务
      *
      * @param level 事务级别
-     * @throws Exception
      */
     public void beginTransaction(int level) {
         Connection conn = null;
         try {
-            conn = connHelper.get();
+            conn = connectionHelper.get();
         } catch (Exception e) {
             throw new DataAccessException(e.getMessage(), e);
         }
@@ -201,7 +218,7 @@ public class DAOHelper {
             try {
                 conn.setAutoCommit(false);
                 conn.setTransactionIsolation(level);
-                connHelper.lockConn(conn);
+                connectionHelper.lockConn(conn);
             } catch (Exception ex) {
                 log.error(ex.getMessage(), ex);
             }
@@ -212,13 +229,11 @@ public class DAOHelper {
 
     /**
      * 提交事务
-     *
-     * @throws Exception
      */
     public void commitTransaction() {
         Connection conn = null;
         try {
-            conn = connHelper.get();
+            conn = connectionHelper.get();
         } catch (Exception e) {
             throw new DataAccessException(e.getMessage(), e);
         }
@@ -235,13 +250,11 @@ public class DAOHelper {
 
     /**
      * 回滚事务
-     *
-     * @throws Exception
      */
     public void rollbackTransaction() {
         Connection conn = null;
         try {
-            conn = connHelper.get();
+            conn = connectionHelper.get();
         } catch (Exception e) {
             throw new DataAccessException(e.getMessage(), e);
         }
@@ -249,7 +262,7 @@ public class DAOHelper {
             try {
                 conn.rollback();
             } catch (SQLException e) {
-                throw new DataAccessException(e.getMessage(), e);
+                throw new DataAccessException(e.getMessage() + " Rollback ERROR", e);
             }
         } else {
             throw new DataAccessException("conn is null when rollbackTransaction");
@@ -258,13 +271,11 @@ public class DAOHelper {
 
     /**
      * 结束事务
-     *
-     * @throws Exception
      */
     public void endTransaction() {
         Connection conn = null;
         try {
-            conn = connHelper.get();
+            conn = connectionHelper.get();
         } catch (Exception e) {
             throw new DataAccessException(e.getMessage(), e);
         }
@@ -277,8 +288,8 @@ public class DAOHelper {
             } catch (Exception e) {
                 throw new DataAccessException(e.getMessage(), e);
             } finally {
-                connHelper.unLockConn();
-                connHelper.release(conn);
+                connectionHelper.unLockConn();
+                connectionHelper.release(conn);
             }
         } else {
             throw new DataAccessException("conn is null when endTransaction");
