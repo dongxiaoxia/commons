@@ -4,5 +4,5 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public interface IPreparedStatementHandler {
-	public Object exec(PreparedStatement ps) throws SQLException;
+	Object exec(PreparedStatement ps) throws SQLException;
 }

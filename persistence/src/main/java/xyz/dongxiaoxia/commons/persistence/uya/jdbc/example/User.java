@@ -1,6 +1,7 @@
 package xyz.dongxiaoxia.commons.persistence.uya.jdbc.example;
 
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.annotation.Id;
+import xyz.dongxiaoxia.commons.persistence.uya.jdbc.annotation.ProcedureName;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.annotation.Table;
 
 /**
@@ -8,6 +9,7 @@ import xyz.dongxiaoxia.commons.persistence.uya.jdbc.annotation.Table;
  * @create 2016-07-12 16:41
  */
 @Table
+@ProcedureName(delete = "", insert = "insertUser", update = "", updateByID = "", load = "", locaByPage = "")
 public class User {
     @Id
     private int id;

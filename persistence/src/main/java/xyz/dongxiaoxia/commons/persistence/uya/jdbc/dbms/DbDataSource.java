@@ -2,7 +2,7 @@ package xyz.dongxiaoxia.commons.persistence.uya.jdbc.dbms;
 
 import org.slf4j.LoggerFactory;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.dbms.config.DbConfig;
-import xyz.dongxiaoxia.commons.persistence.uya.jdbc.util.JdbcUtil;
+import xyz.dongxiaoxia.commons.persistence.uya.jdbc.util.DbUtil;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -310,7 +310,7 @@ public class DbDataSource extends AbstractDataSource {
             result = false;
         }
 
-        JdbcUtil.closeConnection(connection);
+        DbUtil.closeConnection(connection);
 
         if (result) {
             this.isAlive = true;
@@ -327,7 +327,7 @@ public class DbDataSource extends AbstractDataSource {
         } catch (SQLException e) {
             result = false;
         }
-        JdbcUtil.closeConnection(connection);
+        DbUtil.closeConnection(connection);
         this.isAlive = result;
 
         if (result)
@@ -449,8 +449,8 @@ public class DbDataSource extends AbstractDataSource {
             result = false;
         }
 
-        JdbcUtil.closeResultSet(rs);
-        JdbcUtil.closeStatement(stmt);
+        DbUtil.closeResultSet(rs);
+        DbUtil.closeStatement(stmt);
         return result;
     }
 

@@ -12,8 +12,8 @@ import java.sql.Statement;
  * @author dongxiaoxia
  * @create 2016-07-12 10:53
  */
-public class JdbcUtil {
-    private static final Logger log = LoggerFactory.getLogger(JdbcUtil.class);
+public class DbUtil {
+    private static final Logger log = LoggerFactory.getLogger(DbUtil.class);
 
     public static void closeConnection(Connection conn) {
         if (conn == null) {

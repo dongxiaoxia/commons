@@ -6,9 +6,10 @@ import xyz.dongxiaoxia.commons.persistence.uya.jdbc.dbhelper.DBHelper;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.exceptions.DataAccessException;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.statementcreater.IStatementCreater;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.util.Common;
-import xyz.dongxiaoxia.commons.persistence.uya.jdbc.util.JdbcUtil;
+import xyz.dongxiaoxia.commons.persistence.uya.jdbc.util.DbUtil;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.util.OutSQL;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.util.SqlInjectHelper;
+import xyz.dongxiaoxia.commons.utils.config.PropertiesLoader;
 
 import java.lang.reflect.Field;
 import java.sql.*;
@@ -20,11 +21,11 @@ import java.util.Map;
  * @author dongxiaoxia
  * @create 2016-07-11 15:02
  */
-public class DAOHandler extends DAOBase {
+public class DAOHandler extends AbstractDAOHandler {
     private static Logger log = LoggerFactory.getLogger(DAOHandler.class);
 
-    public DAOHandler(IStatementCreater creater) {
-        super.psCreater = creater;
+    public DAOHandler(IStatementCreater creater, ConnectionHelper connectionHelper, xyz.dongxiaoxia.commons.persistence.uya.jdbc.wrapper.Wrapper wrapper, PropertiesLoader propertiesLoader) {
+        super(creater, connectionHelper, wrapper, propertiesLoader);
     }
 
     @Override
@@ -35,6 +36,7 @@ public class DAOHandler extends DAOBase {
     public Object[] insert(String sql, Object... param) {
         Connection conn = null;
         PreparedStatement ps = null;
+        Object[] ids = null;
         try {
             conn = connHelper.get();
             ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -53,14 +55,14 @@ public class DAOHandler extends DAOBase {
             while (rs.next()) {
                 idList.add(rs.getObject(1));
             }
-            return idList.toArray(new Object[0]);
+            ids = idList.toArray(new Object[0]);
         } catch (Exception e) {
-            log.error("getListByCustom error sql:" + sql, e);
-            throw new DataAccessException(e);
+            reThrow(e, sql);
         } finally {
-            JdbcUtil.closeStatement(ps);
+            DbUtil.closeStatement(ps);
             connHelper.release(conn);
         }
+        return ids;
     }
 
     @Override
@@ -179,6 +181,7 @@ public class DAOHandler extends DAOBase {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
+        int count = 0;
         try {
             conn = connHelper.getReadConnection();
             ps = conn.prepareStatement(sql);
@@ -195,15 +198,14 @@ public class DAOHandler extends DAOBase {
             if (rs.next()) {
                 return rs.getInt(1);
             }
-            return 0;
         } catch (Exception e) {
-            log.error("getCountBySQL error sql:" + sql, e);
-            throw new DataAccessException(e);
+            reThrow(e, sql);
         } finally {
-            JdbcUtil.closeResultSet(rs);
-            JdbcUtil.closeStatement(ps);
+            DbUtil.closeResultSet(rs);
+            DbUtil.closeStatement(ps);
             connHelper.release(conn);
         }
+        return count;
     }
 
     @Override
@@ -225,13 +227,12 @@ public class DAOHandler extends DAOBase {
             long startTime = System.currentTimeMillis();
             rs = ps.executeQuery();
             printlnSqlAndTime(sql, startTime);
-            dataList = populateData(rs, clazz);
+            dataList = wrapper.populateData(rs, clazz);
         } catch (Exception e) {
-            log.error("getListByCustom error sql:" + sql, e);
-            throw new DataAccessException(e);
+            reThrow(e, sql);
         } finally {
-            JdbcUtil.closeResultSet(rs);
-            JdbcUtil.closeStatement(ps);
+            DbUtil.closeResultSet(rs);
+            DbUtil.closeStatement(ps);
             connHelper.release(conn);
         }
         return dataList;
@@ -261,13 +262,12 @@ public class DAOHandler extends DAOBase {
             long startTime = System.currentTimeMillis();
             rs = ps.executeQuery();
             printlnSqlAndTime(sql, startTime);
-            dataList = populateData(rs, classes);
+            dataList = wrapper.populateData(rs, classes);
         } catch (Exception e) {
-            log.error("getListByCustom error sql:" + sql, e);
-            throw new DataAccessException(e);
+            reThrow(e, sql);
         } finally {
-            JdbcUtil.closeResultSet(rs);
-            JdbcUtil.closeStatement(ps);
+            DbUtil.closeResultSet(rs);
+            DbUtil.closeStatement(ps);
             connHelper.release(conn);
         }
         return dataList;
@@ -277,6 +277,7 @@ public class DAOHandler extends DAOBase {
     public int execBySQL(String sql, int timeOut, Object... param) {
         Connection conn = null;
         PreparedStatement ps = null;
+        int result = 0;
         try {
             conn = connHelper.get();
             ps = conn.prepareStatement(sql);
@@ -288,22 +289,22 @@ public class DAOHandler extends DAOBase {
                 }
             }
             long startTime = System.currentTimeMillis();
-            int result = ps.executeUpdate();
+            result = ps.executeUpdate();
             printlnSqlAndTime(sql, startTime);
-            return result;
         } catch (Exception e) {
-            log.error("getListByCustom error sql:" + sql, e);
-            throw new DataAccessException(e);
+            reThrow(e, sql);
         } finally {
-            JdbcUtil.closeStatement(ps);
+            DbUtil.closeStatement(ps);
             connHelper.release(conn);
         }
+        return result;
     }
 
     @Override
     public int[] execBatchSql(String sql, List<Object[]> paramList, boolean useTransaction) {
         Connection conn = null;
         PreparedStatement ps = null;
+        int[] results = null;
         try {
             conn = connHelper.get();
             if (useTransaction) {
@@ -320,25 +321,23 @@ public class DAOHandler extends DAOBase {
             }
 
             long startTime = System.currentTimeMillis();
-            int[] results = ps.executeBatch();
+            results = ps.executeBatch();
             printlnSqlAndTime(sql, startTime);
             if (useTransaction) {
                 DBHelper.getDbHelper().commitTransaction();
             }
-            return results;
         } catch (Exception e) {
-            log.error("execBatchSql error sql:" + sql, e);
             if (useTransaction) {
                 try {
                     DBHelper.getDbHelper().rollbackTransaction();
                 } catch (Exception e1) {
-                    log.error("rollbackTransaction error sql:" + sql, e);
+                    log.error("rollbackTransaction error sql:" + sql, e1);
                     throw new DataAccessException(e1);
                 }
             }
-            throw new DataAccessException(e);
+            reThrow(e, sql);
         } finally {
-            JdbcUtil.closeStatement(ps);
+            DbUtil.closeStatement(ps);
             if (useTransaction) {
                 try {
                     DBHelper.getDbHelper().endTransaction();
@@ -349,6 +348,7 @@ public class DAOHandler extends DAOBase {
                 connHelper.release(conn);
             }
         }
+        return results;
     }
 
     @Override
@@ -393,13 +393,12 @@ public class DAOHandler extends DAOBase {
             long startTime = System.currentTimeMillis();
             rs = ps.executeQuery();
             printlnSqlAndTime(sql.getRealSql(), startTime);
-            dataList = populateData(rs, clazz);
+            dataList = wrapper.populateData(rs, clazz);
         } catch (Exception e) {
-            log.error("getListByCustom error sql:" + sql.getSql(), e);
-            throw new DataAccessException(e);
+            reThrow(e, sql.getSql());
         } finally {
-            JdbcUtil.closeResultSet(rs);
-            JdbcUtil.closeStatement(ps);
+            DbUtil.closeResultSet(rs);
+            DbUtil.closeStatement(ps);
             connHelper.release(conn);
         }
         return dataList;
@@ -466,11 +465,10 @@ public class DAOHandler extends DAOBase {
                 }
             }
         } catch (Exception e) {
-            log.error("insert error sql:" + sql.getSql(), e);
-            throw new DataAccessException(e);
+            reThrow(e, sql.getSql());
         } finally {
-            JdbcUtil.closeResultSet(rs);
-            JdbcUtil.closeStatement(ps);
+            DbUtil.closeResultSet(rs);
+            DbUtil.closeStatement(ps);
             connHelper.release(conn);
         }
         return rst;
@@ -488,10 +486,9 @@ public class DAOHandler extends DAOBase {
             ps.executeUpdate();
             printlnSqlAndTime(sql.getRealSql(), startTime);
         } catch (Exception e) {
-            log.error("update error sql:" + sql.getSql(), e);
-            throw new DataAccessException(e);
+            reThrow(e, sql.getSql());
         } finally {
-            JdbcUtil.closeStatement(ps);
+            DbUtil.closeStatement(ps);
             connHelper.release(conn);
         }
     }
@@ -508,10 +505,9 @@ public class DAOHandler extends DAOBase {
             ps.executeUpdate();
             printlnSqlAndTime(sql.getRealSql(), startTime);
         } catch (Exception e) {
-            log.error("update error sql:" + sql.getSql(), e);
-            throw new DataAccessException(e);
+            reThrow(e, sql.getSql());
         } finally {
-            JdbcUtil.closeStatement(ps);
+            DbUtil.closeStatement(ps);
             connHelper.release(conn);
         }
     }
@@ -531,10 +527,9 @@ public class DAOHandler extends DAOBase {
             ps.executeUpdate();
             printlnSqlAndTime(sql.getRealSql(), startTime);
         } catch (Exception e) {
-            log.error("update error sql:" + sql.getSql(), e);
-            throw new DataAccessException(e);
+            reThrow(e, sql.getSql());
         } finally {
-            JdbcUtil.closeStatement(ps);
+            DbUtil.closeStatement(ps);
             connHelper.release(conn);
         }
     }
@@ -551,10 +546,9 @@ public class DAOHandler extends DAOBase {
             ps.execute();
             printlnSqlAndTime(sql.getRealSql(), startTime);
         } catch (Exception e) {
-            log.error("delete error sql:" + sql.getSql(), e);
-            throw new DataAccessException(e);
+            reThrow(e, sql.getSql());
         } finally {
-            JdbcUtil.closeStatement(ps);
+            DbUtil.closeStatement(ps);
             connHelper.release(conn);
         }
     }
@@ -571,10 +565,9 @@ public class DAOHandler extends DAOBase {
             ps.execute();
             printlnSqlAndTime(sql.getRealSql(), startTime);
         } catch (Exception e) {
-            log.error("delete error sql:" + sql.getSql(), e);
-            throw new DataAccessException(e);
+            reThrow(e, sql.getSql());
         } finally {
-            JdbcUtil.closeStatement(ps);
+            DbUtil.closeStatement(ps);
             connHelper.release(conn);
         }
     }
@@ -593,10 +586,9 @@ public class DAOHandler extends DAOBase {
             ps.execute();
             printlnSqlAndTime(sql.getRealSql(), startTime);
         } catch (Exception e) {
-            log.error("delete error sql:" + sql.getSql(), e);
-            throw new DataAccessException(e);
+            reThrow(e, sql.getSql());
         } finally {
-            JdbcUtil.closeStatement(ps);
+            DbUtil.closeStatement(ps);
             connHelper.release(conn);
         }
     }
@@ -614,13 +606,12 @@ public class DAOHandler extends DAOBase {
             long startTime = System.currentTimeMillis();
             rs = ps.executeQuery();
             printlnSqlAndTime(sql.getRealSql(), startTime);
-            dataList = populateData(rs, clazz);
+            dataList = wrapper.populateData(rs, clazz);
         } catch (Exception e) {
-            log.error("get error sql:" + sql.getSql(), e);
-            throw new DataAccessException(e);
+            reThrow(e, sql.getSql());
         } finally {
-            JdbcUtil.closeResultSet(rs);
-            JdbcUtil.closeStatement(ps);
+            DbUtil.closeResultSet(rs);
+            DbUtil.closeStatement(ps);
             connHelper.release(conn);
         }
         if (dataList != null && dataList.size() > 0) {
@@ -643,13 +634,12 @@ public class DAOHandler extends DAOBase {
             long startTime = System.currentTimeMillis();
             rs = ps.executeQuery();
             printlnSqlAndTime(sql.getRealSql(), startTime);
-            dataList = populateData(rs, clazz);
+            dataList = wrapper.populateData(rs, clazz);
         } catch (Exception e) {
-            log.error("get error sql:" + sql.getSql(), e);
-            throw new DataAccessException(e);
+            reThrow(e, sql.getSql());
         } finally {
-            JdbcUtil.closeResultSet(rs);
-            JdbcUtil.closeStatement(ps);
+            DbUtil.closeResultSet(rs);
+            DbUtil.closeStatement(ps);
             connHelper.release(conn);
         }
         if (dataList != null && dataList.size() > 0) {
@@ -675,13 +665,12 @@ public class DAOHandler extends DAOBase {
             long startTime = System.currentTimeMillis();
             rs = ps.executeQuery();
             printlnSqlAndTime(sql.getRealSql(), startTime);
-            dataList = populateData(rs, clazz);
+            dataList = wrapper.populateData(rs, clazz);
         } catch (Exception e) {
-            log.error("getListByCustom error sql:" + sql.getSql(), e);
-            throw new DataAccessException(e);
+            reThrow(e, sql.getSql());
         } finally {
-            JdbcUtil.closeResultSet(rs);
-            JdbcUtil.closeStatement(ps);
+            DbUtil.closeResultSet(rs);
+            DbUtil.closeStatement(ps);
             connHelper.release(conn);
         }
         return dataList;
@@ -709,13 +698,12 @@ public class DAOHandler extends DAOBase {
             long startTime = System.currentTimeMillis();
             rs = ps.executeQuery();
             printlnSqlAndTime(sql.getRealSql(), startTime);
-            dataList = populateData(rs, clazz);
+            dataList = wrapper.populateData(rs, clazz);
         } catch (Exception e) {
-            log.error("getListByPage error sql:" + sql.getSql(), e);
-            throw new DataAccessException(e);
+            reThrow(e, sql.getSql());
         } finally {
-            JdbcUtil.closeResultSet(rs);
-            JdbcUtil.closeStatement(ps);
+            DbUtil.closeResultSet(rs);
+            DbUtil.closeStatement(ps);
             connHelper.release(conn);
         }
         return dataList;
@@ -741,11 +729,10 @@ public class DAOHandler extends DAOBase {
                 count = rs.getInt(1);
             }
         } catch (Exception e) {
-            log.error("getCount error sql:" + sql.getSql(), e);
-            throw new DataAccessException(e);
+            reThrow(e, sql.getSql());
         } finally {
-            JdbcUtil.closeResultSet(rs);
-            JdbcUtil.closeStatement(ps);
+            DbUtil.closeResultSet(rs);
+            DbUtil.closeStatement(ps);
             connHelper.release(conn);
         }
         return count;
@@ -773,11 +760,10 @@ public class DAOHandler extends DAOBase {
                 list.add(objAry);
             }
         } catch (Exception e) {
-            log.error("sql:" + sql, e);
-            throw new DataAccessException(e);
+            reThrow(e, sql);
         } finally {
-            JdbcUtil.closeResultSet(rs);
-            JdbcUtil.closeStatement(stmt);
+            DbUtil.closeResultSet(rs);
+            DbUtil.closeStatement(stmt);
             connHelper.release(conn);
         }
         return list;
@@ -794,10 +780,9 @@ public class DAOHandler extends DAOBase {
             stmt.execute(sql);
             printlnSqlAndTime(sql, startTime);
         } catch (Exception e) {
-            log.error("sql:" + sql, e);
-            throw new DataAccessException(e);
+            reThrow(e, sql);
         } finally {
-            JdbcUtil.closeStatement(stmt);
+            DbUtil.closeStatement(stmt);
             connHelper.release(conn);
         }
     }

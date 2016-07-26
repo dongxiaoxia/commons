@@ -4,5 +4,5 @@ import java.sql.CallableStatement;
 import java.sql.SQLException;
 
 public interface ICallableStatementHandler {
-	public Object exec(CallableStatement cs) throws SQLException;
+	Object exec(CallableStatement cs) throws SQLException;
 }

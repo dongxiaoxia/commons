@@ -1,7 +1,7 @@
 package xyz.dongxiaoxia.commons.persistence.uya.jdbc.dbconnectionpool;
 
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.dbms.AbstractDataSource;
-import xyz.dongxiaoxia.commons.persistence.uya.jdbc.util.JdbcUtil;
+import xyz.dongxiaoxia.commons.persistence.uya.jdbc.util.DbUtil;
 
 import java.sql.Connection;
 
@@ -35,7 +35,7 @@ public class SwapConnectionPool extends ConnectionPool {
 
     public synchronized void release(Connection connection)
     {
-        JdbcUtil.closeConnection(connection);
+        DbUtil.closeConnection(connection);
     }
 
     public Connection GetReadConnection() throws Exception {
