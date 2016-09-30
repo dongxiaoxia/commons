@@ -45,6 +45,7 @@
         <module>../security</module>
         <module>../cache</module>
         <module>../persistence</module>
+        <module>../script</module>
     </modules>
 
     <build>
