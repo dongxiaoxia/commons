@@ -16,7 +16,7 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 import xyz.dongxiaoxia.commons.persistence.uya.mybatis.Page;
 import xyz.dongxiaoxia.commons.persistence.uya.mybatis.dialect.Dialect;
 import xyz.dongxiaoxia.commons.utils.Reflections;
-import xyz.dongxiaoxia.commons.utils.config.Global;
+import xyz.dongxiaoxia.commons.utils.example.Global;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

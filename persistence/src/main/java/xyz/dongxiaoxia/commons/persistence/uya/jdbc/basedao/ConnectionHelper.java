@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.dbconnectionpool.ConnectionPool;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.dbconnectionpool.ConnectionPoolFactory;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.dbconnectionpool.DBConfig;
-import xyz.dongxiaoxia.commons.utils.config.PropertiesLoader;
+import xyz.dongxiaoxia.commons.utils.PropertiesLoader;
 
 import java.io.File;
 import java.net.URL;

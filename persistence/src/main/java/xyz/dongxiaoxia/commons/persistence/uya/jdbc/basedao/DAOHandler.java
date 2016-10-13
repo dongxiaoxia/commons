@@ -9,7 +9,7 @@ import xyz.dongxiaoxia.commons.persistence.uya.jdbc.util.Common;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.util.DbUtil;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.util.OutSQL;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.util.SqlInjectHelper;
-import xyz.dongxiaoxia.commons.utils.config.PropertiesLoader;
+import xyz.dongxiaoxia.commons.utils.PropertiesLoader;
 
 import java.lang.reflect.Field;
 import java.sql.*;

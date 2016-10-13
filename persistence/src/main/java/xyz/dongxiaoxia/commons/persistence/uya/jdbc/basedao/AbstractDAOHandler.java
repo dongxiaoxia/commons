@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.exceptions.DataAccessException;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.statementcreater.IStatementCreater;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.wrapper.Wrapper;
-import xyz.dongxiaoxia.commons.utils.config.PropertiesLoader;
+import xyz.dongxiaoxia.commons.utils.PropertiesLoader;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

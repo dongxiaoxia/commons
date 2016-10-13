@@ -8,7 +8,7 @@ import xyz.dongxiaoxia.commons.persistence.uya.jdbc.statementcreater.IStatementC
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.util.DbUtil;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.wrapper.BeanWrapper;
 import xyz.dongxiaoxia.commons.persistence.uya.jdbc.wrapper.ResultSetHandler;
-import xyz.dongxiaoxia.commons.utils.config.PropertiesLoader;
+import xyz.dongxiaoxia.commons.utils.PropertiesLoader;
 
 import java.net.URL;
 import java.sql.*;

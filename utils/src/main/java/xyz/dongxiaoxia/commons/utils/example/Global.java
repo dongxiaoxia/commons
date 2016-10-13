@@ -1,9 +1,14 @@
-package xyz.dongxiaoxia.commons.utils.config;
+package xyz.dongxiaoxia.commons.utils.example;
+
+import xyz.dongxiaoxia.commons.utils.PropertiesLoader;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 配置用法举例
+ * 一个项目应该存在一个全局配置对象，这个对象是唯一的并且是容易使用的
+ *
  * 全局配置类
  *
  * @author dongxiaoxia
@@ -66,6 +71,4 @@ public class Global {
         }
         return value;
     }
-
-
 }
