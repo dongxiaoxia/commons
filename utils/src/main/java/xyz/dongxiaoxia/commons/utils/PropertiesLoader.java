@@ -1,6 +1,5 @@
 package xyz.dongxiaoxia.commons.utils;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,13 +16,18 @@ public class PropertiesLoader {
 
     private static Logger logger = Logger.getLogger(PropertiesLoader.class.getName());
 
+    /**
+     * .properties属性文件名后缀
+     */
+    public static final String PROPERTY_FILE_SUFFIX = ".properties";
+
     private final Properties properties;
 
-    public PropertiesLoader(String... resourcesPaths) {
-        properties = loadProperties(resourcesPaths);
+    public PropertiesLoader(String... propsFileNames) {
+        properties = loadProperties(propsFileNames);
     }
 
-    public PropertiesLoader(String propsFileName){
+    public PropertiesLoader(String propsFileName) {
         properties = getProperties(propsFileName);
     }
 
@@ -84,7 +88,7 @@ public class PropertiesLoader {
      * @param key
      * @return
      */
-    public Integer getInterger(String key) {
+    public Integer getInteger(String key) {
         String value = getValue(key);
         if (value == null) {
             throw new NoSuchElementException();
@@ -167,77 +171,22 @@ public class PropertiesLoader {
     public Map<String, Object> getAllKeyValue() {
         Map<String, Object> mapAll = new HashMap<>();
         Set<Object> keys = getAllKey();
-        Iterator<Object> it = keys.iterator();
-        while (it.hasNext()) {
-            String key = it.next().toString();
+        for (Object key1 : keys) {
+            String key = key1.toString();
             mapAll.put(key, properties.get(key));
         }
         return mapAll;
     }
 
     /**
-     * 载入多个文件,文件路径使用Spring Resource格式.
-     *
-     * @param resourcesPaths
-     * @return
-     */
-    private Properties loadProperties(String... resourcesPaths) {
-        Properties pros = new Properties();
-        for (String location : resourcesPaths) {
-            logger.info("Loading properties file from:" + location);
-            InputStreamReader inputStreamReader = null;
-            try {
-//                inputStreamReader = new InputStreamReader(PropertiesLoader.class.getClassLoader().getResourceAsStream(location), "UTF-8");// TODO: 2016/7/12 怎么获取第三方包的文件
-                inputStreamReader = new InputStreamReader(new FileInputStream(location), "UTF-8");
-                pros.load(inputStreamReader);
-            } catch (Exception e) {
-                logger.info("Could not load properties from path:" + location + "," + e.getMessage());
-            } finally {
-                try {
-                    if (inputStreamReader != null) {
-                        inputStreamReader.close();
-                    }
-                } catch (IOException e) {
-                    logger.info(e.getMessage());
-                }
-            }
-        }
-        return pros;
-    }
-
-    private Properties loadProperties(InputStream inputStream) {
-        Properties pros = new Properties();
-        InputStreamReader inputStreamReader = null;
-        try {
-            inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
-            pros.load(inputStreamReader);
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-        } finally {
-            try {
-                if (inputStreamReader != null) {
-                    inputStreamReader.close();
-                }
-            } catch (IOException e) {
-                logger.info(e.getMessage());
-            }
-        }
-        return pros;
-    }
-
-    /**
-     * .properties属性文件名后缀
-     */
-    public static final String PROPERTY_FILE_SUFFIX = ".properties";
-
-
-    /**
      * 根据Properties配置文件名称获取配置文件对象
      *
-     * @param propsFileName Properties配置文件名称（从ClassPath根下获取）
+     * @param propsFileName Properties配置文件名称（从ClassPath根下获取） 可以不带扩展名
+     *                      eg.根目录下有个common.properties,那么可以传“common”或者“common.properties”
+     *                      根目录下有个config文件夹，里面存在common.properties,那么可以传“config/common”或者“config/common.properties”
      * @return Properties对象
      */
-    public static Properties getProperties(String propsFileName) {
+    private Properties getProperties(String propsFileName) {
         if (propsFileName == null || propsFileName.equals("")) throw new IllegalArgumentException();
         Properties properties = new Properties();
         InputStream inputStream = null;
@@ -247,7 +196,7 @@ public class PropertiesLoader {
                     propsFileName += PROPERTY_FILE_SUFFIX;
                 }
                 //写法1：
-//                inputStream = currentThread().getContextClassLoader().getResourceAsStream(propsFileName);
+//                inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(propsFileName);
                 //写法2：
 //                URL url = Thread.currentThread().getContextClassLoader().getResource(propsFileName);
 //                inputStream = url.openStream();
@@ -257,7 +206,7 @@ public class PropertiesLoader {
 //                URL url = PropertyUtil.class.getClassLoader().getResource(propsFileName);
 //                inputStream = url.openStream();
                 //写法5：
-                inputStream = PropertiesLoader.class.getResourceAsStream("/" + propsFileName);
+//                inputStream = PropertiesLoader.class.getResourceAsStream("/" + propsFileName);
                 if (null != inputStream) properties.load(inputStream);
             } finally {
                 if (null != inputStream) {
@@ -270,5 +219,50 @@ public class PropertiesLoader {
             throw new RuntimeException(e.getMessage(), e);
         }
         return properties;
+    }
+
+    /**
+     * 载入多个文件
+     *
+     * @param propsFileNames
+     * @return
+     */
+    private Properties loadProperties(String... propsFileNames) {
+        Properties pros = new Properties();
+        for (String propsFileName : propsFileNames) {
+            InputStream inputStream = null;
+            try {
+                inputStream = PropertiesLoader.class.getClassLoader().getResourceAsStream(propsFileName);
+                pros.load(inputStream);
+            } catch (Exception e) {
+                logger.info("Could not load properties from path:" + propsFileName + "," + e.getMessage());
+            } finally {
+                try {
+                    if (inputStream != null) {
+                        inputStream.close();
+                    }
+                } catch (IOException e) {
+                    logger.info(e.getMessage());
+                }
+            }
+        }
+        return pros;
+    }
+
+    /**
+     * 根据输入流载入Properties对象
+     *
+     * @param inputStream
+     * @return
+     */
+    private Properties loadProperties(InputStream inputStream) {
+        Properties pros = new Properties();
+//        pros.load(inputStream);
+        try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8")) {
+            pros.load(inputStreamReader);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+        }
+        return pros;
     }
 }

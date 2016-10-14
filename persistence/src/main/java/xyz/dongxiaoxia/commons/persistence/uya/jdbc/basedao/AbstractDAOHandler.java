@@ -51,8 +51,8 @@ public abstract class AbstractDAOHandler implements IDAO {
         this.psCreater = creater;
         this.connHelper = connectionHelper;
         this.wrapper = wrapper;
-        this.queryTimeOut = propertiesLoader.getInterger("QueryTimeOut");
-        this.insertUpdateTimeOut = propertiesLoader.getInterger("InsertUpdateTimeOut");
+        this.queryTimeOut = propertiesLoader.getInteger("QueryTimeOut");
+        this.insertUpdateTimeOut = propertiesLoader.getInteger("InsertUpdateTimeOut");
         this.printlnSqlAndTime = propertiesLoader.getBoolean("PrintlnSqlAndTime");
     }
 

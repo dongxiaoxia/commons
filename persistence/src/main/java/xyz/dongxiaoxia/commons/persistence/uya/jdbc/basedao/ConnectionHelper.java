@@ -72,9 +72,9 @@ public class ConnectionHelper {
         String driver = loader.getProperty("driver");
         String username = loader.getProperty("username");
         String password = loader.getProperty("password");
-        int minPoolSize = loader.getInterger("minPoolSize");
-        int maxPoolSize = loader.getInterger("maxPoolSize");
-        int idleTimeOut = loader.getInterger("idleTimeOut");
+        int minPoolSize = loader.getInteger("minPoolSize");
+        int maxPoolSize = loader.getInteger("maxPoolSize");
+        int idleTimeOut = loader.getInteger("idleTimeOut");
         boolean autoShrink = loader.getBoolean("autoShrink");
 
         log.debug("ConnectionPool URL:" + url);
