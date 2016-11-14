@@ -15,6 +15,15 @@
         <relativePath>../install/pom.xml</relativePath>
     </parent>
 
+    <distributionManagement>
+        <repository>
+            <id>file-repository</id>
+            <url>file://D:\GitHub\maven-repo</url>
+            <!--SNAPSHOT 名称下用 Maven3 uniqueVersion不起作用 ，必须用Maven2-->
+            <uniqueVersion>false</uniqueVersion>
+        </repository>
+    </distributionManagement>
+
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>
