@@ -24,12 +24,28 @@
         </repository>
     </distributionManagement>
 
+    <properties>
+        <http-client-version>4.3.5</http-client-version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>${http-client-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>xyz.dongxiaoxia.commons</groupId>
+            <artifactId>json</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
