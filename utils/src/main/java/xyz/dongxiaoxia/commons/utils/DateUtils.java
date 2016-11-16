@@ -12,6 +12,53 @@ import java.util.Date;
  * @create 2016-07-06 17:40
  */
 public class DateUtils {
+
+    /**
+     * 日期转换为字符串
+     *
+     * @param date
+     * @return
+     */
+    public static String DateTimeToStr(Date date) {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+    }
+
+    /**
+     * 字符串转日期
+     *
+     * @param str
+     * @return
+     * @throws ParseException
+     */
+    public static Date StrToDateTime(String str) throws ParseException {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(str);
+    }
+
+    /**
+     * 日期转换为字符串
+     *
+     * @param date
+     * @return
+     */
+    public static String DateToStr(Date date) {
+        return new SimpleDateFormat("yyyy-MM-dd").format(date);
+    }
+
+    /**
+     * 字符串转日期
+     * @param str
+     * @return
+     * @throws ParseException
+     */
+    public static Date StrToDate(String str) throws ParseException {
+        return new SimpleDateFormat("yyyy-MM-dd").parse(str);
+    }
+
+    public static Date currentDate(){
+        return new Date();
+    }
+
+
     /**
      * 根据日期获取星期几
      *
@@ -27,6 +74,10 @@ public class DateUtils {
             week_index = 0;
         }
         return weeks[week_index];
+    }
+
+    public static double getAgeNum(Date date){
+       return  ((currentDate().getTime() - date.getTime()) /(1000 * 60 * 60 * 24 ))/365d;
     }
 
     public static String getAge(Date date) {
@@ -49,7 +100,7 @@ public class DateUtils {
             month = (month + 12) % 12;
             year--;
         }
-       return year + "岁" + month + "个月" + day + "天";
+        return year + "岁" + month + "个月" + day + "天";
     }
 
     public static void main(String[] args) throws ParseException {
