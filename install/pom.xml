@@ -6,7 +6,7 @@
     <packaging>pom</packaging>
     <groupId>xyz.dongxiaoxia.commons</groupId>
     <artifactId>install</artifactId>
-    <version>${project_version}</version>
+    <version>1.0-SNAPSHOT</version>
     <name>install</name>
     <url>http://maven.apache.org</url>
 
@@ -20,6 +20,18 @@
         <jdk.version>1.8</jdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>http://maven.aliyun.com/nexus/content/repositories/central</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <dependencies>
         <!--JUnit-->
@@ -51,23 +63,23 @@
     <build>
         <plugins>
             <!--<plugin>-->
-                <!--<groupId>org.mortbay.jetty</groupId>-->
-                <!--<artifactId>jetty-maven-plugin</artifactId>-->
-                <!--<version>8.1.9.v20130131</version>-->
-                <!--<configuration>-->
-                    <!--<stopPort>9966</stopPort>-->
-                    <!--<stopKey>foo</stopKey>-->
-                    <!--<scanIntervalSeconds>0</scanIntervalSeconds>-->
-                    <!--<connectors>-->
-                        <!--<connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">-->
-                            <!--<port>8080</port>-->
-                            <!--<maxIdleTime>60000</maxIdleTime>-->
-                        <!--</connector>-->
-                    <!--</connectors>-->
-                    <!--<webAppConfig>-->
-                        <!--<contextPath>/</contextPath>-->
-                    <!--</webAppConfig>-->
-                <!--</configuration>-->
+            <!--<groupId>org.mortbay.jetty</groupId>-->
+            <!--<artifactId>jetty-maven-plugin</artifactId>-->
+            <!--<version>8.1.9.v20130131</version>-->
+            <!--<configuration>-->
+            <!--<stopPort>9966</stopPort>-->
+            <!--<stopKey>foo</stopKey>-->
+            <!--<scanIntervalSeconds>0</scanIntervalSeconds>-->
+            <!--<connectors>-->
+            <!--<connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">-->
+            <!--<port>8080</port>-->
+            <!--<maxIdleTime>60000</maxIdleTime>-->
+            <!--</connector>-->
+            <!--</connectors>-->
+            <!--<webAppConfig>-->
+            <!--<contextPath>/</contextPath>-->
+            <!--</webAppConfig>-->
+            <!--</configuration>-->
             <!--</plugin>-->
 
             <!-- Compiler 插件, 设定JDK版本 -->
