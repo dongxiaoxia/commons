@@ -1,4 +1,4 @@
-package xyz.dongxiaoxia.commons.utils;
+package xyz.dongxiaoxia.commons.utils.http;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;

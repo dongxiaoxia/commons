@@ -1,4 +1,4 @@
-package xyz.dongxiaoxia.commons.utils;
+package xyz.dongxiaoxia.commons.utils.IDGenerator;
 
 /**
  * Twitter_Snowflake<br>

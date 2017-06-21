@@ -1,6 +1,6 @@
 package xyz.dongxiaoxia.commons.persistence.uya.mybatis;
 
-import xyz.dongxiaoxia.commons.utils.IDGen;
+import xyz.dongxiaoxia.commons.utils.IDGenerator.IDGen;
 
 import java.util.Date;
 
