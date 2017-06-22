@@ -1,4 +1,4 @@
-package xyz.dongxiaoxia.commons.utils;
+package xyz.dongxiaoxia.commons.utils.io;
 
 import java.io.File;
 
@@ -36,4 +36,6 @@ public class FileUtil {
     public static Boolean checkFileExist(String filePath,String fileName){
         return getFile(new File(filePath), fileName) != null;
     }
+
+
 }
