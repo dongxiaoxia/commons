@@ -26,6 +26,7 @@
 
     <properties>
         <http-client-version>4.3.5</http-client-version>
+        <commons-fileupload-version>1.2.1</commons-fileupload-version>
     </properties>
 
     <dependencies>
@@ -33,13 +34,19 @@
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
-            <scope>provided</scope>
+            <!--<scope>provided</scope>-->
         </dependency>
 
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpmime</artifactId>
             <version>${http-client-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>${commons-fileupload-version}</version>
         </dependency>
 
         <dependency>
